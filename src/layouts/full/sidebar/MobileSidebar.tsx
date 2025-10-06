@@ -36,8 +36,9 @@ const MobileSidebar = () => {
                 className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white"
               >
                 {colleges &&
-                  colleges.map((college, index) => (
-                    <option key={index} value={college.name}>
+                  // explicitly type college and index to avoid implicit any
+                  (colleges as Array<any>).map((college: any, idx: number) => (
+                    <option key={idx} value={college.name}>
                       {college.name}
                     </option>
                   ))}
@@ -48,14 +49,15 @@ const MobileSidebar = () => {
             <Sidebar.Items className="px-5 mt-2">
               <Sidebar.ItemGroup className="sidebar-nav hide-menu">
                 {SidebarContent &&
-                  SidebarContent?.map((item, index) => (
+                  // explicitly type SidebarContent and mapping parameters
+                  (SidebarContent as Array<any>).map((item: any, itemIdx: number) => (
                     <div className="caption" key={item.heading}>
-                      <React.Fragment key={index}>
+                      <React.Fragment key={itemIdx}>
                         <h5 className="text-link dark:text-white/70 caption font-semibold leading-6 tracking-widest text-xs pb-2 uppercase">
                           {item.heading}
                         </h5>
-                        {item.children?.map((child, index) => (
-                          <React.Fragment key={child.id && index}>
+                        {item.children?.map((child: any, childIdx: number) => (
+                          <React.Fragment key={child.id ?? childIdx}>
                             <NavItems item={child} />
                           </React.Fragment>
                         ))}
