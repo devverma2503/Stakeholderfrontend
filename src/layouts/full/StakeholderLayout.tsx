@@ -80,11 +80,12 @@ const StakeholderLayout: FC = () => {
                     </h5>
                     {[
                       { id: 'overview', label: 'Overview', icon: 'solar:chart-2-bold-duotone' },
-                      { id: 'colleges', label: 'Colleges', icon: 'solar:buildings-3-bold-duotone' },
+                      { id: 'colleges', label: 'College Wise', icon: 'solar:buildings-3-bold-duotone' },
+                      { id: 'product-wise', label: 'Product Wise', icon: 'solar:box-bold-duotone' },
                       { id: 'geography', label: 'Geography', icon: 'solar:map-point-bold-duotone' },
                       {
                         id: 'sales',
-                        label: 'Sales Team',
+                        label: 'Agent Wise',
                         icon: 'solar:users-group-two-rounded-bold-duotone',
                       },
                     ].map((view) => (
@@ -112,7 +113,7 @@ const StakeholderLayout: FC = () => {
         <div className="page-wrapper flex flex-col flex-1">
           {/* Stakeholder Navbar Header */}
           <header className="sticky top-0 z-[5] bg-indigo-600 shadow-lg rounded-b-lg overflow-hidden">
-            <Navbar fluid className="bg-transparent py-6 px-6">
+            <Navbar fluid className="bg-transparent py-8 px-6">
               <div className="flex items-center justify-between w-full">
                 {/* Left side - Mobile menu button and title */}
                 <div className="flex items-center gap-4">
@@ -128,10 +129,10 @@ const StakeholderLayout: FC = () => {
                   
                   {/* Title for all screen sizes */}
                   <div>
-                    <h1 className="text-xl font-bold text-white">
+                    <h1 className="text-2xl font-bold text-white">
                       Stakeholder Dashboard
                     </h1>
-                    <p className="text-emerald-100 text-sm hidden sm:block">Business Intelligence & Analytics</p>
+                    <p className="text-emerald-100 text-base hidden sm:block">Business Intelligence & Analytics</p>
                   </div>
                 </div>
 
@@ -250,11 +251,12 @@ const StakeholderLayout: FC = () => {
                 <div className="flex items-center gap-2 overflow-x-auto pb-2">
                   {[
                     { id: 'overview', label: 'Overview', icon: 'solar:chart-2-bold-duotone' },
-                    { id: 'colleges', label: 'Colleges', icon: 'solar:buildings-3-bold-duotone' },
+                    { id: 'colleges', label: 'College Wise', icon: 'solar:buildings-3-bold-duotone' },
+                    { id: 'product-wise', label: 'Product Wise', icon: 'solar:box-bold-duotone' },
                     { id: 'geography', label: 'Geography', icon: 'solar:map-point-bold-duotone' },
                     {
                       id: 'sales',
-                      label: 'Sales Team',
+                      label: 'Agent Wise',
                       icon: 'solar:users-group-two-rounded-bold-duotone',
                     },
                   ].map((view) => (

@@ -15,6 +15,7 @@ interface OutletContext {
   selectedView: string;
   selectedSubject: string;
   selectedZone: string;
+  selectedState?: string;
   setSelectedView: (view: string) => void;
 }
 
@@ -58,6 +59,22 @@ const StakeholderDashboard = () => {
             showFullMetrics={false}
           />
 
+          <CourseRevenueTable
+            timeRange={selectedTimeRange}
+            selectedSubject={selectedSubject}
+            selectedZone={selectedZone}
+          />
+        </>
+      )}
+
+      {selectedView === 'product-wise' && (
+        <>
+          {/* Product Wise view - reuse course/product related components */}
+          <CourseSalesDistribution
+            timeRange={selectedTimeRange}
+            selectedSubject={selectedSubject}
+            selectedZone={selectedZone}
+          />
           <CourseRevenueTable
             timeRange={selectedTimeRange}
             selectedSubject={selectedSubject}

@@ -48,9 +48,7 @@ const CourseRevenueTable = ({
         index < 5 ? 'Core Medical Subject' : index < 10 ? 'Clinical Subject' : 'Specialty Subject',
       revenue,
       enrollments,
-      avgPrice: revenue > 0 ? Math.floor(revenue / enrollments) : 0,
       growth: `+${(12 + Math.random() * 20).toFixed(1)}%`,
-      status: 'Active',
       lastUpdated: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000)
         .toISOString()
         .split('T')[0],
@@ -106,19 +104,6 @@ const CourseRevenueTable = ({
     if (value >= 15) return 'text-blue-600 bg-blue-50';
     if (value >= 10) return 'text-yellow-600 bg-yellow-50';
     return 'text-red-600 bg-red-50';
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'Active':
-        return 'text-green-700 bg-green-100';
-      case 'Limited':
-        return 'text-yellow-700 bg-yellow-100';
-      case 'Inactive':
-        return 'text-red-700 bg-red-100';
-      default:
-        return 'text-gray-700 bg-gray-100';
-    }
   };
 
   const formatCurrency = (amount: number) => {
@@ -220,26 +205,7 @@ const CourseRevenueTable = ({
                   />
                 </button>
               </th>
-              <th className="text-right py-3 px-4 font-semibold text-gray-900">
-                <button
-                  onClick={() => handleSort('avgPrice')}
-                  className="flex items-center gap-2 hover:text-emerald-600 transition-colors ml-auto"
-                >
-                  Avg. Price
-                  <Icon
-                    icon={
-                      sortBy === 'avgPrice' && sortOrder === 'desc'
-                        ? 'solar:alt-arrow-down-bold'
-                        : 'solar:alt-arrow-up-bold'
-                    }
-                    width={12}
-                    className={sortBy === 'avgPrice' ? 'text-emerald-600' : 'text-gray-400'}
-                  />
-                </button>
-              </th>
               <th className="text-center py-3 px-4 font-semibold text-gray-900">Growth</th>
-              <th className="text-center py-3 px-4 font-semibold text-gray-900">Status</th>
-              <th className="text-center py-3 px-4 font-semibold text-gray-900">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
@@ -267,9 +233,6 @@ const CourseRevenueTable = ({
                 <td className="py-4 px-4 text-right">
                   <span className="text-gray-900">{course.enrollments.toLocaleString()}</span>
                 </td>
-                <td className="py-4 px-4 text-right">
-                  <span className="text-gray-900">₹{course.avgPrice.toLocaleString()}</span>
-                </td>
                 <td className="py-4 px-4 text-center">
                   <span
                     className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getGrowthColor(
@@ -278,28 +241,6 @@ const CourseRevenueTable = ({
                   >
                     {course.growth}
                   </span>
-                </td>
-                <td className="py-4 px-4 text-center">
-                  <span
-                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(
-                      course.status,
-                    )}`}
-                  >
-                    {course.status}
-                  </span>
-                </td>
-                <td className="py-4 px-4 text-center">
-                  <div className="flex items-center justify-center gap-2">
-                    <button className="p-1 text-gray-400 hover:text-emerald-600 transition-colors">
-                      <Icon icon="solar:eye-bold-duotone" width={16} />
-                    </button>
-                    <button className="p-1 text-gray-400 hover:text-blue-600 transition-colors">
-                      <Icon icon="solar:pen-bold-duotone" width={16} />
-                    </button>
-                    <button className="p-1 text-gray-400 hover:text-red-600 transition-colors">
-                      <Icon icon="solar:chart-2-bold-duotone" width={16} />
-                    </button>
-                  </div>
                 </td>
               </tr>
             ))}
@@ -376,7 +317,7 @@ const CourseRevenueTable = ({
 
       {/* Summary Stats */}
       <div className="mt-6 pt-6 border-t border-gray-200">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           <div className="text-center">
             <div className="text-2xl font-bold text-emerald-600">{courseData.length}</div>
             <div className="text-sm text-gray-600">Total Courses</div>
@@ -393,15 +334,6 @@ const CourseRevenueTable = ({
               {courseData.reduce((sum, course) => sum + course.enrollments, 0).toLocaleString()}
             </div>
             <div className="text-sm text-gray-600">Total Enrollments</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-orange-600">
-              ₹
-              {Math.round(
-                courseData.reduce((sum, course) => sum + course.avgPrice, 0) / courseData.length,
-              ).toLocaleString()}
-            </div>
-            <div className="text-sm text-gray-600">Avg. Course Price</div>
           </div>
         </div>
       </div>
