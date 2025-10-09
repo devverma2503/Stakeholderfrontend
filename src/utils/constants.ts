@@ -33,7 +33,7 @@ export const MEDICAL_SUBJECTS = [
   'DigiNeet',
   'DigiTwo',
   'DigiOne',
-  'FMGE',
+  'DigiFMGE',
 ];
 
 // New PRODUCTS list used for stakeholder product filters

@@ -49,18 +49,31 @@ const RevenueSummaryCards = ({
     const previousAvgRevenue = currentAvgRevenue / (1 + avgGrowth / 100);
     const previousSubjectRevenue = currentSubjectRevenue / (1 + subjectGrowth / 100);
 
+    const topPerformingSubjectValue =
+      selectedSubject !== 'all'
+        ? selectedSubject
+        : MEDICAL_SUBJECTS && MEDICAL_SUBJECTS.length
+        ? MEDICAL_SUBJECTS[Math.floor(Math.random() * MEDICAL_SUBJECTS.length)]
+        : 'DigiOne';
+
     return {
       // Current period
       totalRevenue: formatCurrency(currentRevenue),
+      totalRevenueNum: currentRevenue,
       activeSubscriptions: currentSubscriptions,
       avgRevenuePerCollege: formatCurrency(currentAvgRevenue),
+      avgRevenuePerCollegeNum: currentAvgRevenue,
       subjectRevenue: formatCurrency(currentSubjectRevenue),
+      subjectRevenueNum: currentSubjectRevenue,
 
       // Previous period
       previousRevenue: formatCurrency(previousRevenue),
+      previousRevenueNum: previousRevenue,
       previousSubscriptions: previousSubscriptions,
       previousAvgRevenue: formatCurrency(previousAvgRevenue),
+      previousAvgRevenueNum: previousAvgRevenue,
       previousSubjectRevenue: formatCurrency(previousSubjectRevenue),
+      previousSubjectRevenueNum: previousSubjectRevenue,
 
       // Changes
       revenueChange: `+${revenueGrowth.toFixed(1)}%`,
@@ -68,20 +81,23 @@ const RevenueSummaryCards = ({
       avgChange: `+${avgGrowth.toFixed(1)}%`,
       subjectChange: `+${subjectGrowth.toFixed(1)}%`,
 
-      topPerformingSubject:
-        selectedSubject !== 'all'
-          ? selectedSubject
-          : MEDICAL_SUBJECTS[Math.floor(Math.random() * 5)],
+      topPerformingSubject: topPerformingSubjectValue,
     };
   };
 
   const data = getFilteredData();
+
+  const makePercent = (prev?: number, curr?: number) => {
+    if (prev == null || curr == null || curr === 0) return '-';
+    return `${((prev / curr) * 100).toFixed(1)}%`;
+  };
 
   const cards = [
     {
       title: 'Total Revenue',
       value: data.totalRevenue,
       previousValue: data.previousRevenue,
+      previousPercent: makePercent(data.previousRevenueNum, data.totalRevenueNum),
       change: data.revenueChange,
       icon: 'solar:dollar-minimalistic-bold-duotone',
       bgColor: 'bg-gradient-to-br from-emerald-50 to-emerald-100',
@@ -92,6 +108,7 @@ const RevenueSummaryCards = ({
       title: 'Unique Subscriptions',
       value: data.activeSubscriptions.toLocaleString(),
       previousValue: data.previousSubscriptions.toLocaleString(),
+      previousPercent: makePercent(data.previousSubscriptions, data.activeSubscriptions),
       change: data.subscriptionChange,
       icon: 'solar:users-group-two-rounded-bold-duotone',
       bgColor: 'bg-gradient-to-br from-blue-50 to-blue-100',
@@ -102,6 +119,7 @@ const RevenueSummaryCards = ({
       title: 'Top performing Zone',
       value: data.avgRevenuePerCollege,
       previousValue: data.previousAvgRevenue,
+      previousPercent: makePercent(data.previousAvgRevenueNum, data.avgRevenuePerCollegeNum),
       change: data.avgChange,
       icon: 'solar:buildings-3-bold-duotone',
       bgColor: 'bg-gradient-to-br from-purple-50 to-purple-100',
@@ -112,6 +130,7 @@ const RevenueSummaryCards = ({
       title: 'Top Performing Product',
       value: data.topPerformingSubject,
       previousValue: data.previousSubjectRevenue,
+      previousPercent: makePercent(data.previousSubjectRevenueNum, data.subjectRevenueNum),
       change: data.subjectChange,
       icon: 'solar:medal-star-bold-duotone',
       bgColor: 'bg-gradient-to-br from-orange-50 to-orange-100',
@@ -138,6 +157,7 @@ const RevenueSummaryCards = ({
               >
                 <Icon icon="solar:alt-arrow-up-bold" width={12} />
                 {card.change}
+                <span className="text-xs text-gray-500 ml-1">Previous</span>
               </div>
             </div>
           </div>
@@ -151,8 +171,11 @@ const RevenueSummaryCards = ({
           <div className="mt-4 pt-4 border-t border-gray-200/30">
             <div className="flex items-center justify-between text-xs">
               <div className="text-gray-500">
-                <span>Previous: </span>
-                <span className="font-medium text-gray-600">{card.previousValue}</span>
+                <span className={`ml-0 text-xs font-medium ${card.changeColor} bg-white/70 px-2 py-1 rounded-full flex items-center gap-1`}>
+                  <Icon icon="solar:alt-arrow-up-bold" width={12} />
+                  {card.previousPercent}
+                  <span className="text-xs text-gray-500 ml-1">Previous Year</span>
+                </span>
               </div>
               <div className="flex items-center gap-1">
                 <div className="w-2 h-2 bg-current rounded-full opacity-60"></div>
