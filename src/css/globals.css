@@ -199,3 +199,33 @@ table {
 .container {
   box-sizing: border-box;
 }
+
+@media (min-width: 529px) and (max-width: 1059px) {
+  /* Make ApexCharts legends more compact and nudged left in this mid-range */
+  .apexcharts-legend {
+    font-size: 10px !important;
+    line-height: 1 !important;
+    /* nudge the whole legend left a bit */
+    transform: translateX(-14px) !important;
+    left: 8px !important;
+    top: 8px !important;
+    padding: 4px 6px !important;
+  }
+
+  .apexcharts-legend .apexcharts-legend-series {
+    margin-right: 6px !important;
+    padding: 2px 6px !important;
+  }
+
+  .apexcharts-legend .apexcharts-legend-marker {
+    width: 9px !important;
+    height: 9px !important;
+    margin-right: 6px !important;
+    transform: scale(0.8) !important;
+  }
+
+  /* Ensure chart title/controls have space when legend is nudged */
+  .apexcharts-canvas svg {
+    overflow: visible;
+  }
+}

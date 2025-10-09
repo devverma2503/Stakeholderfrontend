@@ -208,31 +208,66 @@ const CollegePerformanceOverview = ({
       {/* College Performance Table */}
       <div className="mt-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Detailed College Metrics</h3>
-        <div className="overflow-x-auto">
+
+        {/* Small screens: stacked cards */}
+        <div className="sm:hidden space-y-3">
+          {collegeData.map((college, index) => (
+            <div key={index} className="bg-white rounded-lg shadow p-3 border">
+              <div className="flex items-start justify-between">
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-blue-500 rounded-md flex items-center justify-center text-white font-bold text-sm">
+                    {college.name.substring(0, 2).toUpperCase()}
+                  </div>
+                  <div>
+                    <div className="font-medium text-gray-900 text-sm break-words">{college.name}</div>
+                    <div className="text-xs text-gray-500">{college.zone}</div>
+                  </div>
+                </div>
+
+                <div className="text-right">
+                  <div className="text-sm font-bold text-gray-900">{formatCurrency(college.revenue)}</div>
+                  <div className="text-xs text-gray-500">{college.students.toLocaleString()} students</div>
+                </div>
+              </div>
+
+              <div className="mt-3">
+                <div className="flex items-center justify-between">
+                  <div className="text-sm font-medium text-gray-900">Usage: {college.usage}%</div>
+                  <div className="text-xs text-gray-500">Satisfaction {college.satisfaction}%</div>
+                </div>
+                <div className="w-full bg-gray-200 h-2 rounded-full mt-2">
+                  <div
+                    className={`h-2 rounded-full ${
+                      college.usage >= 85
+                        ? 'bg-emerald-500'
+                        : college.usage >= 60
+                        ? 'bg-blue-500'
+                        : 'bg-orange-500'
+                    }`}
+                    style={{ width: `${college.usage}%` }}
+                  />
+                </div>
+                <div className="mt-2 flex items-center justify-between">
+                  <div className="text-xs text-gray-500">Active Subjects: {college.activeSubjects}</div>
+                  <div className="text-xs text-gray-400">Growth {college.growth}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop/table for sm+ screens */}
+        <div className="hidden sm:block overflow-x-auto">
           <table className="min-w-full bg-white border border-gray-200 rounded-lg">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  College
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Zone
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Usage
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Revenue
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Students
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Satisfaction
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Growth
-                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">College</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Zone</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Usage</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Revenue</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Students</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Satisfaction</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Growth</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -242,39 +277,26 @@ const CollegePerformanceOverview = ({
                     <div className="text-sm font-medium text-gray-900">{college.name}</div>
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                      {college.zone}
-                    </span>
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">{college.zone}</span>
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="text-sm font-medium text-gray-900">{college.usage}%</div>
                       <div className={`ml-2 w-16 bg-gray-200 rounded-full h-2`}>
-                        <div
-                          className={`h-2 rounded-full ${
-                            college.usage >= 85
-                              ? 'bg-emerald-500'
-                              : college.usage >= 60
-                              ? 'bg-blue-500'
-                              : 'bg-orange-500'
-                          }`}
-                          style={{ width: `${college.usage}%` }}
-                        ></div>
+                        <div className={`h-2 rounded-full ${
+                          college.usage >= 85
+                            ? 'bg-emerald-500'
+                            : college.usage >= 60
+                            ? 'bg-blue-500'
+                            : 'bg-orange-500'
+                        }`} style={{ width: `${college.usage}%` }} />
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {formatCurrency(college.revenue)}
-                  </td>
-                  <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {college.students.toLocaleString()}
-                  </td>
-                  <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {college.satisfaction}%
-                  </td>
-                  <td className="px-4 py-4 whitespace-nowrap text-sm font-medium text-emerald-600">
-                    {college.growth}
-                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">{formatCurrency(college.revenue)}</td>
+                  <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">{college.students.toLocaleString()}</td>
+                  <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">{college.satisfaction}%</td>
+                  <td className="px-4 py-4 whitespace-nowrap text-sm font-medium text-emerald-600">{college.growth}</td>
                 </tr>
               ))}
             </tbody>

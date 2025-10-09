@@ -18,12 +18,9 @@ const RevenueAnalytics = ({
   showGeographyFilter = false,
   showSalesFilter = false,
 }: RevenueAnalyticsProps) => {
-  const [selectedCourse, setSelectedCourse] = useState('all');
   const [selectedMetric, setSelectedMetric] = useState('revenue');
   const [selectedGeography, setSelectedGeography] = useState('all');
   const [selectedSalesAgent, setSelectedSalesAgent] = useState('all');
-
-  const courses = ['All Courses', ...MEDICAL_SUBJECTS];
 
   const geographyOptions = ['All Regions', ...GEOGRAPHIC_ZONES];
   const salesAgents = [
@@ -252,8 +249,112 @@ const RevenueAnalytics = ({
       },
       legend: {
         position: 'top' as const,
+        horizontalAlign: 'left' as const,
+        offsetX: -6,
+        offsetY: 0,
+        // slightly smaller defaults for better compactness
+        fontSize: '12px',
+        markers: {
+          width: 10,
+          height: 10,
+        },
+        itemMargin: {
+          horizontal: 8,
+          vertical: 0,
+        },
       },
-    },
+      },
+      responsive: [
+        {
+          breakpoint: 1280,
+          options: {
+            legend: {
+              horizontalAlign: 'left',
+              offsetX: -10,
+              fontSize: '12px',
+              markers: { width: 10, height: 10 },
+            },
+            chart: { height: 380 },
+          },
+        },
+        {
+          breakpoint: 1024,
+          options: {
+            legend: {
+              horizontalAlign: 'left',
+              offsetX: -18,
+              fontSize: '11px',
+              markers: { width: 9, height: 9 },
+            },
+            chart: {
+              height: 360,
+            },
+          },
+        },
+        {
+          breakpoint: 768,
+          options: {
+            legend: {
+              position: 'top',
+              horizontalAlign: 'left',
+              offsetX: -26,
+              offsetY: -6,
+              fontSize: '10px',
+              markers: { width: 8, height: 8 },
+              itemMargin: { horizontal: 6, vertical: 2 },
+            },
+            chart: { height: 320 },
+          },
+        },
+        {
+          breakpoint: 640,
+          options: {
+            // small phones: keep legend on top-left, smaller and nudged left
+            legend: {
+              position: 'top',
+              horizontalAlign: 'left',
+              offsetX: -36,
+              offsetY: -8,
+              fontSize: '9px',
+              markers: { width: 7, height: 7 },
+              itemMargin: { horizontal: 5, vertical: 4 },
+            },
+            chart: { height: 280 },
+          },
+        },
+        {
+          breakpoint: 480,
+          options: {
+            // extra small phones: further left and smaller
+            legend: {
+              position: 'top',
+              horizontalAlign: 'left',
+              offsetX: -48,
+              offsetY: -10,
+              fontSize: '8px',
+              markers: { width: 6, height: 6 },
+              itemMargin: { horizontal: 4, vertical: 6 },
+            },
+            chart: { height: 240 },
+          },
+        },
+        {
+          breakpoint: 360,
+          options: {
+            // tiniest screens: very compact legend shifted further left
+            legend: {
+              position: 'top',
+              horizontalAlign: 'left',
+              offsetX: -60,
+              offsetY: -12,
+              fontSize: '7px',
+              markers: { width: 5, height: 5 },
+              itemMargin: { horizontal: 3, vertical: 6 },
+            },
+            chart: { height: 220 },
+          },
+        },
+      ],
   };
 
   return (
@@ -287,19 +388,6 @@ const RevenueAnalytics = ({
               </button>
             ))}
           </div>
-
-          {/* Course Filter */}
-          <select
-            value={selectedCourse}
-            onChange={(e) => setSelectedCourse(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm"
-          >
-            {courses.map((course, index) => (
-              <option key={index} value={course.toLowerCase().replace(/\s+/g, '-') }>
-                {course}
-              </option>
-            ))}
-          </select>
 
           {/* Geography Filter */}
           {showGeographyFilter && (
