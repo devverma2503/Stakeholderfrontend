@@ -32,7 +32,7 @@ const FullLayout: FC = () => {
               {/* Body Content  */}
               <div className={`w-full`}>
                 <ScrollToTop>
-                  <div className="container py-30">
+                  <div className="container py-6 md:py-12">
                     <Outlet />
                   </div>
                 </ScrollToTop>

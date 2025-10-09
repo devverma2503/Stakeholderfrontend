@@ -86,7 +86,7 @@ const Header = ({ selectedTimeRange, setSelectedTimeRange }: HeaderProps) => {
       >
         <Navbar
           fluid
-          className={`rounded-none bg-transparent dark:bg-transparent py-4 sm:px-30 px-4`}
+          className="rounded-none bg-transparent dark:bg-transparent py-4 px-4 sm:px-6 md:px-8"
         >
           <div className="flex gap-3 items-center justify-between w-full">
             {/* Hamburger menu for mobile */}
@@ -198,7 +198,7 @@ const Header = ({ selectedTimeRange, setSelectedTimeRange }: HeaderProps) => {
       </header>
 
       {/* Mobile Sidebar */}
-      <Drawer open={isOpen} onClose={handleClose} className="w-130">
+      <Drawer open={isOpen} onClose={handleClose} className="w-80 md:w-96">
         <Drawer.Items>
           <MobileSidebar />
         </Drawer.Items>
