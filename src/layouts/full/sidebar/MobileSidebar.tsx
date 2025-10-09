@@ -17,7 +17,7 @@ const MobileSidebar = () => {
     <>
       <div>
         <Sidebar
-          className="fixed menu-sidebar pt-0 bg-white dark:bg-darkgray transition-all"
+          className="fixed inset-0 md:inset-auto md:top-0 md:left-0 md:w-80 menu-sidebar pt-0 bg-white dark:bg-darkgray transition-all"
           aria-label="Sidebar with multi-level dropdown example"
         >
           <div className="px-5 py-4 pb-7 flex items-center sidebarlogo">
@@ -45,7 +45,7 @@ const MobileSidebar = () => {
               </select>
             </div>
           </div>
-          <SimpleBar className="h-[calc(100vh_-_300px)]">
+          <SimpleBar className="h-[calc(100vh_-_180px)] md:h-[calc(100vh_-_120px)]">
             <Sidebar.Items className="px-5 mt-2">
               <Sidebar.ItemGroup className="sidebar-nav hide-menu">
                 {SidebarContent &&
@@ -58,7 +58,9 @@ const MobileSidebar = () => {
                         </h5>
                         {item.children?.map((child: any, childIdx: number) => (
                           <React.Fragment key={child.id ?? childIdx}>
-                            <NavItems item={child} />
+                            <div className="w-full">
+                              <NavItems item={child} />
+                            </div>
                           </React.Fragment>
                         ))}
                       </React.Fragment>

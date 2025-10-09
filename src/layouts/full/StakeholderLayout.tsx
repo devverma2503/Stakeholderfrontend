@@ -5,10 +5,11 @@ import { TIME_RANGES, PRODUCTS, GEOGRAPHIC_ZONES, INDIAN_STATES } from '../../ut
 import { useUiStore } from 'src/stores/uiStore';
 import Profile from './header/Profile';
 import ScrollToTop from 'src/components/shared/ScrollToTop';
-import { Navbar, Sidebar } from 'flowbite-react';
+import { Navbar, Sidebar, Drawer } from 'flowbite-react';
 import FullLogo from './shared/logo/FullLogo';
 // @ts-ignore
 import SimpleBar from 'simplebar-react';
+import MobileSidebar from './sidebar/MobileSidebar';
 
 const StakeholderLayout: FC = () => {
   const [selectedTimeRange, setSelectedTimeRange] = useState('1month');
@@ -24,6 +25,11 @@ const StakeholderLayout: FC = () => {
   const handleRefresh = () => {
     window.location.reload();
   };
+
+  // Mobile sidebar drawer state
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const openMobileSidebar = () => setIsMobileOpen(true);
+  const closeMobileSidebar = () => setIsMobileOpen(false);
 
   // Format date range for display
   const formatDateRange = () => {
@@ -113,14 +119,25 @@ const StakeholderLayout: FC = () => {
         <div className="page-wrapper flex flex-col flex-1">
           {/* Stakeholder Navbar Header */}
           <header className="sticky top-0 z-[5] bg-indigo-600 shadow-lg rounded-b-lg overflow-hidden">
-            <Navbar fluid className="bg-transparent py-8 px-6">
-              <div className="flex items-center justify-between w-full">
-                {/* Left side - Mobile menu button and title */}
-                <div className="flex items-center gap-4">
+            <Navbar fluid className="bg-transparent py-4 md:py-8 px-4 md:px-6">
+               <div className="flex items-center justify-between w-full">
+                 {/* Left side - Mobile menu button and title */}
+                 <div className="flex items-center gap-4">
                   {/* Mobile menu button */}
                   <button
                     className="xl:hidden p-2 rounded-lg bg-white/20 text-white hover:bg-white/30 transition-colors"
-                    onClick={() => {}} // Will add mobile menu logic later
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openMobileSidebar();
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        openMobileSidebar();
+                      }
+                    }}
+                    aria-label="Open sidebar"
                   >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -129,15 +146,15 @@ const StakeholderLayout: FC = () => {
                   
                   {/* Title for all screen sizes */}
                   <div>
-                    <h1 className="text-2xl font-bold text-white">
+                    <h1 className="text-lg md:text-2xl font-bold text-white">
                       Stakeholder Dashboard
                     </h1>
-                    <p className="text-emerald-100 text-base hidden sm:block">Business Intelligence & Analytics</p>
+                    <p className="text-emerald-100 text-sm md:text-base hidden sm:block">Business Intelligence & Analytics</p>
                   </div>
-                </div>
+                 </div>
 
-                {/* Right side - Filters and Controls */}
-                <div className="flex items-center gap-3">
+                 {/* Right side - Filters and Controls */}
+                 <div className="flex items-center gap-3 flex-wrap">
                   {/* Time Range Filter */}
                   <div className="hidden xl:flex items-center gap-2">
                     <select
@@ -247,48 +264,66 @@ const StakeholderLayout: FC = () => {
               </div>
 
               {/* Mobile Navigation - Show navigation tabs on mobile */}
-              <div className="xl:hidden mt-4 pt-4 border-t border-white/20">
-                <div className="flex items-center gap-2 overflow-x-auto pb-2">
-                  {[
-                    { id: 'overview', label: 'Overview', icon: 'solar:chart-2-bold-duotone' },
-                    { id: 'colleges', label: 'College Wise', icon: 'solar:buildings-3-bold-duotone' },
-                    { id: 'product-wise', label: 'Product Wise', icon: 'solar:box-bold-duotone' },
-                    { id: 'geography', label: 'Geography', icon: 'solar:map-point-bold-duotone' },
-                    {
-                      id: 'sales',
-                      label: 'Agent Wise',
-                      icon: 'solar:users-group-two-rounded-bold-duotone',
-                    },
-                  ].map((view) => (
-                    <button
-                      key={view.id}
-                      onClick={() => setSelectedView(view.id)}
-                      className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 whitespace-nowrap ${
-                        selectedView === view.id
-                          ? 'bg-white text-emerald-600 shadow-sm'
-                          : 'text-white bg-white/20 hover:bg-white/30'
-                      }`}
-                    >
-                      <Icon icon={view.icon} width={16} />
-                      {view.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
             </Navbar>
           </header>
 
+          {/* Mobile Sidebar Drawer - renders stakeholder sidebar on mobile */}
+          <Drawer open={isMobileOpen} onClose={closeMobileSidebar} className="w-80 md:w-96 z-[9999]" position="left" aria-label="Stakeholder sidebar drawer">
+             <div className="h-full bg-white dark:bg-darkgray">
+               <div className="px-6 py-4 flex items-center sidebarlogo">
+                 <FullLogo />
+               </div>
+               <SimpleBar>
+                 <div className="px-5 mt-2">
+                   <div className="caption">
+                     <h5 className="text-link dark:text-white/70 caption font-semibold leading-6 tracking-widest text-xs pb-2 uppercase">
+                       STAKEHOLDER VIEWS
+                     </h5>
+                     {[
+                       { id: 'overview', label: 'Overview', icon: 'solar:chart-2-bold-duotone' },
+                       { id: 'colleges', label: 'College Wise', icon: 'solar:buildings-3-bold-duotone' },
+                       { id: 'product-wise', label: 'Product Wise', icon: 'solar:box-bold-duotone' },
+                       { id: 'geography', label: 'Geography', icon: 'solar:map-point-bold-duotone' },
+                       {
+                         id: 'sales',
+                         label: 'Agent Wise',
+                         icon: 'solar:users-group-two-rounded-bold-duotone',
+                       },
+                     ].map((view) => (
+                       <div key={view.id} className="mb-1">
+                         <button
+                           onClick={() => {
+                             setSelectedView(view.id);
+                             closeMobileSidebar();
+                           }}
+                           className={`w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-md transition-all duration-200 ${
+                             selectedView === view.id
+                               ? 'bg-lightprimary text-primary dark:bg-primary/20 dark:text-primary'
+                               : 'text-ld hover:bg-lightprimary hover:text-primary dark:text-white dark:hover:bg-primary/20 dark:hover:text-primary'
+                           }`}
+                         >
+                           <Icon icon={view.icon} width={20} />
+                           {view.label}
+                         </button>
+                       </div>
+                     ))}
+                   </div>
+                 </div>
+               </SimpleBar>
+             </div>
+           </Drawer>
+
           {/* Main Content Area */}
-          <div className="flex-1 p-6 dark:bg-darkgray bg-gray-50">
+          <div className="flex-1 p-4 md:p-6 dark:bg-darkgray bg-gray-50">
             <ScrollToTop>
               <></>
             </ScrollToTop>
             <Outlet context={{ selectedTimeRange, selectedView, selectedSubject, selectedZone, selectedState, setSelectedView, setSelectedState }} />
           </div>
-        </div>
-      </div>
-    </>
-  );
-};
-
-export default StakeholderLayout;
+         </div>
+       </div>
+     </>
+   );
+ };
+ 
+ export default StakeholderLayout;
