@@ -4,14 +4,12 @@ import Chart from 'react-apexcharts';
 import { GEOGRAPHIC_ZONES } from '../../utils/constants';
 
 interface CourseSalesDistributionProps {
-  timeRange: string;
   selectedSubject?: string;
   selectedZone?: string;
   showGeographyFilter?: boolean;
 }
 
 const CourseSalesDistribution = ({
-  timeRange,
   selectedSubject = 'all',
   selectedZone = 'all',
   showGeographyFilter = false,
