@@ -5,6 +5,7 @@ import SalesAgentProfile from 'src/views/profile/SalesAgentProfile';
 
 /* ***Layouts**** */
 const FullLayout = lazy(() => import('../layouts/full/FullLayout'));
+const StakeholderLayout = lazy(() => import('../layouts/full/StakeholderLayout'));
 const BlankLayout = lazy(() => import('../layouts/blank/BlankLayout'));
 
 // Dashboard
@@ -49,7 +50,6 @@ const Router = [
     children: [
       { path: '/', exact: true, element: <Dashboard /> },
       //   { path: '/', exact: true, element: <InternalDashboard /> },
-        { path: '/stakeholder', exact: true, element: <StakeholderDashboard /> },
       { path: '/profile/student/:userId', exact: true, element: <StudentProfile /> },
         { path: '/profile/sales-agent', exact: true, element: <SalesAgentProfile /> },
       //   { path: '/ui/typography', exact: true, element: <Typography /> },
@@ -64,6 +64,17 @@ const Router = [
       //   { path: '/icons/solar', exact: true, element: <Solar /> },
       //   { path: '/sample-page', exact: true, element: <SamplePage /> },
       { path: '*', element: <Navigate to="/auth/404" /> },
+    ],
+  },
+  {
+    path: '/stakeholder',
+    element: (
+      <ProtectedRoute>
+        <StakeholderLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      { path: '/stakeholder', exact: true, element: <StakeholderDashboard /> },
     ],
   },
   {
