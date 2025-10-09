@@ -68,6 +68,36 @@ const RevenueAnalytics = ({
     );
   };
 
+  // generate previous year revenue data (slightly lower baseline and similar noise)
+  const generatePreviousRevenueData = () => {
+    let baseMultiplier = 0.92; // slightly lower baseline for previous year
+
+    if (selectedSubject !== 'all') {
+      const subjectIndex = MEDICAL_SUBJECTS.indexOf(selectedSubject);
+      baseMultiplier *= subjectIndex !== -1 ? (20 - subjectIndex) / 20 : 0.5;
+    }
+
+    if (selectedZone !== 'all') {
+      baseMultiplier *= 0.4;
+    }
+
+    const baseData =
+      timeRange === '7days'
+        ? [42000, 50000, 46000, 62000, 56000, 69000, 66000]
+        : timeRange === '1month'
+        ? [
+            300000, 395000, 365000, 430000, 500000, 460000, 530000, 475000, 600000, 560000, 615000,
+            585000, 650000, 625000, 690000, 665000, 715000, 690000, 750000, 730000, 785000, 765000,
+            820000, 795000, 840000, 815000, 860000, 845000, 890000, 870000,
+          ]
+        : [
+            7800000, 8500000, 8200000, 9100000, 9500000, 9000000, 10100000, 9800000, 10600000,
+            10200000, 10900000, 10600000,
+          ];
+
+    return baseData.map((value) => Math.floor(value * baseMultiplier * (0.9 + Math.random() * 0.2)));
+  };
+
   const generateSalesData = () => {
     let baseMultiplier = 1;
 
@@ -97,6 +127,30 @@ const RevenueAnalytics = ({
     );
   };
 
+  // previous year sales for dotted line when showing sales metric
+  const generatePreviousSalesData = () => {
+    let baseMultiplier = 0.92;
+    if (selectedSubject !== 'all') {
+      const subjectIndex = MEDICAL_SUBJECTS.indexOf(selectedSubject);
+      baseMultiplier *= subjectIndex !== -1 ? (20 - subjectIndex) / 20 : 0.5;
+    }
+    if (selectedZone !== 'all') {
+      baseMultiplier *= 0.4;
+    }
+
+    const baseData =
+      timeRange === '7days'
+        ? [10, 13, 9, 16, 12, 18, 15]
+        : timeRange === '1month'
+        ? [
+            78, 85, 82, 98, 92, 108, 103, 116, 112, 128, 122, 136, 132, 148, 142, 156, 150, 164,
+            158, 172, 166, 180, 174, 188, 182, 196, 190, 204, 198, 212,
+          ]
+        : [420, 490, 450, 540, 500, 580, 560, 640, 610, 680, 650, 710];
+
+    return baseData.map((value) => Math.floor(value * baseMultiplier * (0.9 + Math.random() * 0.2)));
+  };
+
   const getChartLabels = () => {
     if (timeRange === '7days') {
       return ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -107,14 +161,31 @@ const RevenueAnalytics = ({
     }
   };
 
+  // prepare current and previous data for chart
+  const currentRevenueData = generateRevenueData();
+  const previousRevenueData = generatePreviousRevenueData();
+  const currentSalesData = generateSalesData();
+  const previousSalesData = generatePreviousSalesData();
+
   const chartData = {
-    series: [
-      {
-        name: selectedMetric === 'revenue' ? 'Revenue (₹)' : 'Sales Count',
-        data: selectedMetric === 'revenue' ? generateRevenueData() : generateSalesData(),
-        color: '#10b981',
-      },
-    ],
+    series:
+      selectedMetric === 'revenue'
+        ? [
+            {
+              name: 'Revenue (₹) - Current',
+              data: currentRevenueData,
+              color: '#10b981',
+            },
+            {
+              name: 'Revenue (₹) - Previous',
+              data: previousRevenueData,
+              color: '#ef4444',
+            },
+          ]
+        : [
+            { name: 'Sales Count - Current', data: currentSalesData, color: '#10b981' },
+            { name: 'Sales Count - Previous', data: previousSalesData, color: '#ef4444' },
+          ],
     options: {
       chart: {
         type: 'line' as const,
@@ -132,8 +203,9 @@ const RevenueAnalytics = ({
         },
       },
       stroke: {
-        width: 3,
+        width: [3, 2],
         curve: 'smooth' as const,
+        dashArray: [0, 6], // make previous year dotted
       },
       xaxis: {
         categories: getChartLabels(),
@@ -163,7 +235,7 @@ const RevenueAnalytics = ({
       },
       markers: {
         size: 6,
-        colors: ['#10b981'],
+        colors: undefined,
         strokeColors: '#fff',
         strokeWidth: 2,
       },
@@ -177,6 +249,9 @@ const RevenueAnalytics = ({
           opacityFrom: 1,
           opacityTo: 1,
         },
+      },
+      legend: {
+        position: 'top' as const,
       },
     },
   };
@@ -220,7 +295,7 @@ const RevenueAnalytics = ({
             className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm"
           >
             {courses.map((course, index) => (
-              <option key={index} value={course.toLowerCase().replace(/\s+/g, '-')}>
+              <option key={index} value={course.toLowerCase().replace(/\s+/g, '-') }>
                 {course}
               </option>
             ))}
@@ -234,7 +309,7 @@ const RevenueAnalytics = ({
               className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm"
             >
               {geographyOptions.map((geo, index) => (
-                <option key={index} value={geo.toLowerCase().replace(/\s+/g, '-')}>
+                <option key={index} value={geo.toLowerCase().replace(/\s+/g, '-') }>
                   {geo}
                 </option>
               ))}
@@ -249,7 +324,7 @@ const RevenueAnalytics = ({
               className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm"
             >
               {salesAgents.map((agent, index) => (
-                <option key={index} value={agent.toLowerCase().replace(/\s+/g, '-')}>
+                <option key={index} value={agent.toLowerCase().replace(/\s+/g, '-') }>
                   {agent}
                 </option>
               ))}

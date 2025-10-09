@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Icon } from '@iconify/react';
 import Chart from 'react-apexcharts';
-import { MEDICAL_SUBJECTS, GEOGRAPHIC_ZONES } from '../../utils/constants';
+import { GEOGRAPHIC_ZONES } from '../../utils/constants';
 
 interface CourseSalesDistributionProps {
   timeRange: string;
@@ -16,11 +16,12 @@ const CourseSalesDistribution = ({
   selectedZone = 'all',
   showGeographyFilter = false,
 }: CourseSalesDistributionProps) => {
-  const [selectedDateRange, setSelectedDateRange] = useState(timeRange);
   const [selectedGeography, setSelectedGeography] = useState('all');
   const [selectedMetric, setSelectedMetric] = useState('sales');
   const [viewType, setViewType] = useState<'course-wise' | 'zone-wise'>('course-wise');
-  const [zoneViewSubject, setZoneViewSubject] = useState(MEDICAL_SUBJECTS[0]);
+
+  const COURSES = ['DigiOne', 'DigiNeet', 'DigiTwo', 'DigiFMGE'];
+  const [zoneViewSubject, setZoneViewSubject] = useState(COURSES[0]);
 
   const geographyOptions = ['All Regions', ...GEOGRAPHIC_ZONES];
 
@@ -39,7 +40,7 @@ const CourseSalesDistribution = ({
     }
 
     const subjectsToShow =
-      selectedSubject !== 'all' ? [selectedSubject] : MEDICAL_SUBJECTS.slice(0, 7); // Top 7 subjects
+      selectedSubject !== 'all' ? [selectedSubject] : COURSES.slice(0, 7); // Use new course list
 
     const baseData = subjectsToShow.map((subject, index) => ({
       course: subject,
@@ -254,20 +255,6 @@ const CourseSalesDistribution = ({
             ))}
           </div>
 
-          {/* Date Range Filter - only for course-wise view */}
-          {viewType === 'course-wise' && (
-            <select
-              value={selectedDateRange}
-              onChange={(e) => setSelectedDateRange(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm"
-            >
-              <option value="7days">Last 7 Days</option>
-              <option value="3months">Last 3 Months</option>
-              <option value="6months">Last 6 Months</option>
-              <option value="1year">Last Year</option>
-            </select>
-          )}
-
           {/* Subject Selector for Zone View */}
           {viewType === 'zone-wise' && (
             <select
@@ -275,7 +262,7 @@ const CourseSalesDistribution = ({
               onChange={(e) => setZoneViewSubject(e.target.value)}
               className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm"
             >
-              {MEDICAL_SUBJECTS.map((subject) => (
+              {COURSES.map((subject) => (
                 <option key={subject} value={subject}>
                   {subject}
                 </option>
@@ -348,49 +335,6 @@ const CourseSalesDistribution = ({
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Summary Statistics */}
-      <div className="mt-6 pt-6 border-t border-gray-200">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="text-center">
-            <div className="text-2xl font-bold text-emerald-600">{currentData.length}</div>
-            <div className="text-sm text-gray-600">
-              {viewType === 'course-wise' ? 'Active Courses' : 'Active Zones'}
-            </div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-blue-600">
-              {viewType === 'course-wise'
-                ? (currentData[0] as any).course
-                : (currentData[0] as any).zone}
-            </div>
-            <div className="text-sm text-gray-600">Top Performer</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-purple-600">
-              {currentData[0].percentage.toFixed(1)}%
-            </div>
-            <div className="text-sm text-gray-600">
-              {viewType === 'course-wise'
-                ? (currentData[0] as any).course
-                : (currentData[0] as any).zone}{' '}
-              Share
-            </div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-orange-600">
-              ₹
-              {(
-                currentData.reduce((sum, item) => sum + item.revenue, 0) /
-                currentData.reduce((sum, item) => sum + item.sales, 0) /
-                1000
-              ).toFixed(0)}
-              K
-            </div>
-            <div className="text-sm text-gray-600">Avg. Price</div>
           </div>
         </div>
       </div>

@@ -1,7 +1,6 @@
 import { useOutletContext } from 'react-router';
 import RevenueSummaryCards from '../../components/stakeholder/RevenueSummaryCards';
 import RevenueAnalytics from '../../components/stakeholder/RevenueAnalytics';
-import YearOnYearComparison from '../../components/stakeholder/YearOnYearComparison';
 import CourseSalesDistribution from '../../components/stakeholder/CourseSalesDistribution';
 import GeographyRevenue from '../../components/stakeholder/GeographyRevenue';
 import CourseRevenueTable from '../../components/stakeholder/CourseRevenueTable';
@@ -44,11 +43,6 @@ const StakeholderDashboard = () => {
 
           {/* Key Performance Grid */}
           {/* <div className="grid grid-cols-1 xl:grid-cols-2 gap-6"> */}
-          <YearOnYearComparison
-            timeRange={selectedTimeRange}
-            selectedSubject={selectedSubject}
-            selectedZone={selectedZone}
-          />
           <CourseSalesDistribution
             timeRange={selectedTimeRange}
             selectedSubject={selectedSubject}
@@ -75,11 +69,6 @@ const StakeholderDashboard = () => {
       {selectedView === 'revenue' && (
         <>
           <RevenueAnalytics
-            timeRange={selectedTimeRange}
-            selectedSubject={selectedSubject}
-            selectedZone={selectedZone}
-          />
-          <YearOnYearComparison
             timeRange={selectedTimeRange}
             selectedSubject={selectedSubject}
             selectedZone={selectedZone}

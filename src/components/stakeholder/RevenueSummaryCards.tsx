@@ -89,7 +89,7 @@ const RevenueSummaryCards = ({
       changeColor: 'text-emerald-600',
     },
     {
-      title: 'Active Subscriptions',
+      title: 'Unique Subscriptions',
       value: data.activeSubscriptions.toLocaleString(),
       previousValue: data.previousSubscriptions.toLocaleString(),
       change: data.subscriptionChange,
@@ -99,7 +99,7 @@ const RevenueSummaryCards = ({
       changeColor: 'text-blue-600',
     },
     {
-      title: 'Avg. Revenue per College',
+      title: 'Top performing Zone',
       value: data.avgRevenuePerCollege,
       previousValue: data.previousAvgRevenue,
       change: data.avgChange,
@@ -109,7 +109,7 @@ const RevenueSummaryCards = ({
       changeColor: 'text-purple-600',
     },
     {
-      title: 'Top Performing Course',
+      title: 'Top Performing Product',
       value: data.topPerformingSubject,
       previousValue: data.previousSubjectRevenue,
       change: data.subjectChange,

@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import { Outlet } from 'react-router';
 import { Icon } from '@iconify/react';
-import { TIME_RANGES, MEDICAL_SUBJECTS, GEOGRAPHIC_ZONES } from '../../utils/constants';
+import { TIME_RANGES, PRODUCTS, GEOGRAPHIC_ZONES, INDIAN_STATES } from '../../utils/constants';
 import { useUiStore } from 'src/stores/uiStore';
 import Profile from './header/Profile';
 import ScrollToTop from 'src/components/shared/ScrollToTop';
@@ -15,6 +15,7 @@ const StakeholderLayout: FC = () => {
   const [selectedView, setSelectedView] = useState('overview');
   const [selectedSubject, setSelectedSubject] = useState('all');
   const [selectedZone, setSelectedZone] = useState('all');
+  const [selectedState, setSelectedState] = useState('all');
 
   // Get additional state from UI store
   const { startDate, endDate, setDateRange } = useUiStore();
@@ -110,8 +111,8 @@ const StakeholderLayout: FC = () => {
 
         <div className="page-wrapper flex flex-col flex-1">
           {/* Stakeholder Navbar Header */}
-          <header className="sticky top-0 z-[5] bg-indigo-600 shadow-lg">
-            <Navbar fluid className="rounded-none bg-transparent py-4 px-6">
+          <header className="sticky top-0 z-[5] bg-indigo-600 shadow-lg rounded-b-lg overflow-hidden">
+            <Navbar fluid className="bg-transparent py-6 px-6">
               <div className="flex items-center justify-between w-full">
                 {/* Left side - Mobile menu button and title */}
                 <div className="flex items-center gap-4">
@@ -170,18 +171,34 @@ const StakeholderLayout: FC = () => {
                     )}
                   </div>
 
-                  {/* Subject Filter */}
+                  {/* Product Filter (renamed from Subjects) */}
                   <select
                     value={selectedSubject}
                     onChange={(e) => setSelectedSubject(e.target.value)}
                     className="hidden md:block px-3 py-1 bg-white/20 backdrop-blur-sm border border-white/30 rounded-md text-white text-sm focus:ring-2 focus:ring-white/50 focus:border-transparent"
                   >
                     <option value="all" className="text-gray-900">
-                      All Subjects
+                      All Products
                     </option>
-                    {MEDICAL_SUBJECTS.map((subject) => (
-                      <option key={subject} value={subject} className="text-gray-900">
-                        {subject}
+                    {PRODUCTS.map((product) => (
+                      <option key={product} value={product} className="text-gray-900">
+                        {product}
+                      </option>
+                    ))}
+                  </select>
+
+                  {/* State Filter */}
+                  <select
+                    value={selectedState}
+                    onChange={(e) => setSelectedState(e.target.value)}
+                    className="hidden md:block px-3 py-1 bg-white/20 backdrop-blur-sm border border-white/30 rounded-md text-white text-sm focus:ring-2 focus:ring-white/50 focus:border-transparent"
+                  >
+                    <option value="all" className="text-gray-900">
+                      All States
+                    </option>
+                    {INDIAN_STATES.map((st) => (
+                      <option key={st} value={st} className="text-gray-900">
+                        {st}
                       </option>
                     ))}
                   </select>
@@ -264,7 +281,7 @@ const StakeholderLayout: FC = () => {
             <ScrollToTop>
               <></>
             </ScrollToTop>
-            <Outlet context={{ selectedTimeRange, selectedView, selectedSubject, selectedZone, setSelectedView }} />
+            <Outlet context={{ selectedTimeRange, selectedView, selectedSubject, selectedZone, selectedState, setSelectedView, setSelectedState }} />
           </div>
         </div>
       </div>

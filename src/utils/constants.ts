@@ -30,26 +30,14 @@ export const INFO_POPOVER_CONTENTS = {
 
 // 19 MBBS Subjects
 export const MEDICAL_SUBJECTS = [
-  'Anatomy',
-  'Physiology',
-  'Biochemistry',
-  'Pathology',
-  'Pharmacology',
-  'Microbiology',
-  'Forensic Medicine',
-  'Community Medicine',
-  'General Medicine',
-  'General Surgery',
-  'Obstetrics & Gynecology',
-  'Pediatrics',
-  'Orthopedics',
-  'Ophthalmology',
-  'ENT',
-  'Dermatology',
-  'Psychiatry',
-  'Radiology',
-  'Anesthesiology',
+  'DigiNeet',
+  'DigiTwo',
+  'DigiOne',
+  'FMGE',
 ];
+
+// New PRODUCTS list used for stakeholder product filters
+export const PRODUCTS = ['DigiOne', 'DigiNeet', 'DigiTwo', 'DigiFMGE'];
 
 // Subject Categories
 export const SUBJECT_CATEGORIES = {
