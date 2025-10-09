@@ -267,51 +267,129 @@ const StakeholderLayout: FC = () => {
             </Navbar>
           </header>
 
-          {/* Mobile Sidebar Drawer - renders stakeholder sidebar on mobile */}
+          {/* Mobile Sidebar Drawer - renders stakeholder sidebar on mobile with filters on top */}
           <Drawer open={isMobileOpen} onClose={closeMobileSidebar} className="w-80 md:w-96 z-[9999]" position="left" aria-label="Stakeholder sidebar drawer">
-             <div className="h-full bg-white dark:bg-darkgray">
-               <div className="px-6 py-4 flex items-center sidebarlogo">
-                 <FullLogo />
-               </div>
-               <SimpleBar>
-                 <div className="px-5 mt-2">
-                   <div className="caption">
-                     <h5 className="text-link dark:text-white/70 caption font-semibold leading-6 tracking-widest text-xs pb-2 uppercase">
-                       STAKEHOLDER VIEWS
-                     </h5>
-                     {[
-                       { id: 'overview', label: 'Overview', icon: 'solar:chart-2-bold-duotone' },
-                       { id: 'colleges', label: 'College Wise', icon: 'solar:buildings-3-bold-duotone' },
-                       { id: 'product-wise', label: 'Product Wise', icon: 'solar:box-bold-duotone' },
-                       { id: 'geography', label: 'Geography', icon: 'solar:map-point-bold-duotone' },
-                       {
-                         id: 'sales',
-                         label: 'Agent Wise',
-                         icon: 'solar:users-group-two-rounded-bold-duotone',
-                       },
-                     ].map((view) => (
-                       <div key={view.id} className="mb-1">
-                         <button
-                           onClick={() => {
-                             setSelectedView(view.id);
-                             closeMobileSidebar();
-                           }}
-                           className={`w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-md transition-all duration-200 ${
-                             selectedView === view.id
-                               ? 'bg-lightprimary text-primary dark:bg-primary/20 dark:text-primary'
-                               : 'text-ld hover:bg-lightprimary hover:text-primary dark:text-white dark:hover:bg-primary/20 dark:hover:text-primary'
-                           }`}
-                         >
-                           <Icon icon={view.icon} width={20} />
-                           {view.label}
-                         </button>
-                       </div>
-                     ))}
-                   </div>
-                 </div>
-               </SimpleBar>
-             </div>
-           </Drawer>
+            <div className="h-full bg-white dark:bg-darkgray flex flex-col">
+              <div className="px-6 py-4 flex items-center sidebarlogo">
+                <FullLogo />
+              </div>
+
+              {/* Filters block for mobile - placed above stakeholder views */}
+              <div className="px-5 pb-4 border-b border-gray-100 dark:border-gray-700">
+                <h4 className="text-sm font-semibold text-gray-700 dark:text-white mb-2">Filters</h4>
+                <div className="flex flex-col gap-3">
+                  <select
+                    value={selectedTimeRange}
+                    onChange={(e) => setSelectedTimeRange(e.target.value)}
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  >
+                    {TIME_RANGES.map((r) => (
+                      <option key={r.value} value={r.value} className="text-gray-900">
+                        {r.label}
+                      </option>
+                    ))}
+                  </select>
+
+                  <select
+                    value={selectedSubject}
+                    onChange={(e) => setSelectedSubject(e.target.value)}
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  >
+                    <option value="all">All Products</option>
+                    {PRODUCTS.map((p) => (
+                      <option key={p} value={p} className="text-gray-900">
+                        {p}
+                      </option>
+                    ))}
+                  </select>
+
+                  <select
+                    value={selectedState}
+                    onChange={(e) => setSelectedState(e.target.value)}
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  >
+                    <option value="all">All States</option>
+                    {INDIAN_STATES.map((st) => (
+                      <option key={st} value={st} className="text-gray-900">
+                        {st}
+                      </option>
+                    ))}
+                  </select>
+
+                  <select
+                    value={selectedZone}
+                    onChange={(e) => setSelectedZone(e.target.value)}
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  >
+                    <option value="all">All Zones</option>
+                    {GEOGRAPHIC_ZONES.map((z) => (
+                      <option key={z} value={z} className="text-gray-900">
+                        {z}
+                      </option>
+                    ))}
+                  </select>
+
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => closeMobileSidebar()}
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm bg-white"
+                    >
+                      Apply
+                    </button>
+                    <button
+                      onClick={() => {
+                        setSelectedTimeRange('1month');
+                        setSelectedSubject('all');
+                        setSelectedZone('all');
+                        setSelectedState('all');
+                      }}
+                      className="flex-1 px-3 py-2 rounded-md text-sm bg-gray-100"
+                    >
+                      Reset
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <SimpleBar className="flex-1">
+                <div className="px-5 mt-4">
+                  <div className="caption">
+                    <h5 className="text-link dark:text-white/70 caption font-semibold leading-6 tracking-widest text-xs pb-2 uppercase">
+                      STAKEHOLDER VIEWS
+                    </h5>
+                    {[
+                      { id: 'overview', label: 'Overview', icon: 'solar:chart-2-bold-duotone' },
+                      { id: 'colleges', label: 'College Wise', icon: 'solar:buildings-3-bold-duotone' },
+                      { id: 'product-wise', label: 'Product Wise', icon: 'solar:box-bold-duotone' },
+                      { id: 'geography', label: 'Geography', icon: 'solar:map-point-bold-duotone' },
+                      {
+                        id: 'sales',
+                        label: 'Agent Wise',
+                        icon: 'solar:users-group-two-rounded-bold-duotone',
+                      },
+                    ].map((view) => (
+                      <div key={view.id} className="mb-1">
+                        <button
+                          onClick={() => {
+                            setSelectedView(view.id);
+                            closeMobileSidebar();
+                          }}
+                          className={`w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-md transition-all duration-200 ${
+                            selectedView === view.id
+                              ? 'bg-lightprimary text-primary dark:bg-primary/20 dark:text-primary'
+                              : 'text-ld hover:bg-lightprimary hover:text-primary dark:text-white dark:hover:bg-primary/20 dark:hover:text-primary'
+                          }`}
+                        >
+                          <Icon icon={view.icon} width={20} />
+                          {view.label}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </SimpleBar>
+            </div>
+          </Drawer>
 
           {/* Main Content Area */}
           <div className="flex-1 p-4 md:p-6 dark:bg-darkgray bg-gray-50">

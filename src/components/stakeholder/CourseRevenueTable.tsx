@@ -160,103 +160,134 @@ const CourseRevenueTable = ({
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse">
-          <thead>
-            <tr className="border-b border-gray-200">
-              <th className="text-left py-3 px-4 font-semibold text-gray-900">
-                <button
-                  onClick={() => handleSort('course')}
-                  className="flex items-center gap-2 hover:text-emerald-600 transition-colors"
-                >
-                  Product
-                  <Icon
-                    icon={
-                      sortBy === 'course' && sortOrder === 'desc'
-                        ? 'solar:alt-arrow-down-bold'
-                        : 'solar:alt-arrow-up-bold'
-                    }
-                    width={12}
-                    className={sortBy === 'course' ? 'text-emerald-600' : 'text-gray-400'}
-                  />
-                </button>
-              </th>
-              <th className="text-left py-3 px-4 font-semibold text-gray-900">Category</th>
-              <th className="text-right py-3 px-4 font-semibold text-gray-900">
-                <button
-                  onClick={() => handleSort('revenue')}
-                  className="flex items-center gap-2 hover:text-emerald-600 transition-colors ml-auto"
-                >
-                  Revenue
-                  <Icon
-                    icon={
-                      sortBy === 'revenue' && sortOrder === 'desc'
-                        ? 'solar:alt-arrow-down-bold'
-                        : 'solar:alt-arrow-up-bold'
-                    }
-                    width={12}
-                    className={sortBy === 'revenue' ? 'text-emerald-600' : 'text-gray-400'}
-                  />
-                </button>
-              </th>
-              <th className="text-right py-3 px-4 font-semibold text-gray-900">
-                <button
-                  onClick={() => handleSort('enrollments')}
-                  className="flex items-center gap-2 hover:text-emerald-600 transition-colors ml-auto"
-                >
-                  Enrollments
-                  <Icon
-                    icon={
-                      sortBy === 'enrollments' && sortOrder === 'desc'
-                        ? 'solar:alt-arrow-down-bold'
-                        : 'solar:alt-arrow-up-bold'
-                    }
-                    width={12}
-                    className={sortBy === 'enrollments' ? 'text-emerald-600' : 'text-gray-400'}
-                  />
-                </button>
-              </th>
-              <th className="text-center py-3 px-4 font-semibold text-gray-900">Growth</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200">
-            {currentData.map((course) => (
-              <tr key={course.id} className="hover:bg-gray-50 transition-colors">
-                <td className="py-4 px-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-blue-500 rounded-md flex items-center justify-center text-white font-bold text-sm">
-                      {course.course.substring(0, 2).toUpperCase()}
-                    </div>
-                    <div>
-                      <div className="font-medium text-gray-900 text-sm">{course.course}</div>
-                      <div className="text-xs text-gray-600">Updated {course.lastUpdated}</div>
-                    </div>
+      {/* Responsive: show stacked cards on small screens, table on sm+ */}
+      <div>
+        {/* Small screen card list */}
+        <div className="sm:hidden space-y-3">
+          {currentData.map((course) => (
+            <div key={course.id} className="bg-white rounded-lg shadow p-3">
+              <div className="flex items-start justify-between">
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-blue-500 rounded-md flex items-center justify-center text-white font-bold text-sm">
+                    {course.course.substring(0, 2).toUpperCase()}
                   </div>
-                </td>
-                <td className="py-4 px-4">
-                  <span className="text-sm text-gray-700">{course.category}</span>
-                </td>
-                <td className="py-4 px-4 text-right">
-                  <span className="font-semibold text-gray-900">
-                    {formatCurrency(course.revenue)}
-                  </span>
-                </td>
-                <td className="py-4 px-4 text-right">
-                  <span className="text-gray-900">{course.enrollments.toLocaleString()}</span>
-                </td>
-                <td className="py-4 px-4 text-center">
-                  <span
-                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getGrowthColor(
-                      course.growth,
-                    )}`}
+                  <div>
+                    <div className="font-medium text-gray-900 text-sm break-words">{course.course}</div>
+                    <div className="text-xs text-gray-500">{course.category}</div>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-sm font-semibold text-gray-900">{formatCurrency(course.revenue)}</div>
+                  <div className="text-xs text-gray-500">Enrolls: {course.enrollments.toLocaleString()}</div>
+                </div>
+              </div>
+              <div className="mt-2 flex items-center justify-between">
+                <div className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${getGrowthColor(course.growth)}`}>
+                  {course.growth}
+                </div>
+                <div className="text-xs text-gray-400">Updated {course.lastUpdated}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop/table for sm+ screens */}
+        <div className="hidden sm:block overflow-x-auto">
+          <table className="w-full border-collapse min-w-[640px]">
+            <thead>
+              <tr className="border-b border-gray-200">
+                <th className="text-left py-3 px-4 font-semibold text-gray-900">
+                  <button
+                    onClick={() => handleSort('course')}
+                    className="flex items-center gap-2 hover:text-emerald-600 transition-colors"
                   >
-                    {course.growth}
-                  </span>
-                </td>
+                    Product
+                    <Icon
+                      icon={
+                        sortBy === 'course' && sortOrder === 'desc'
+                          ? 'solar:alt-arrow-down-bold'
+                          : 'solar:alt-arrow-up-bold'
+                      }
+                      width={12}
+                      className={sortBy === 'course' ? 'text-emerald-600' : 'text-gray-400'}
+                    />
+                  </button>
+                </th>
+                <th className="text-left py-3 px-4 font-semibold text-gray-900">Category</th>
+                <th className="text-right py-3 px-4 font-semibold text-gray-900">
+                  <button
+                    onClick={() => handleSort('revenue')}
+                    className="flex items-center gap-2 hover:text-emerald-600 transition-colors ml-auto"
+                  >
+                    Revenue
+                    <Icon
+                      icon={
+                        sortBy === 'revenue' && sortOrder === 'desc'
+                          ? 'solar:alt-arrow-down-bold'
+                          : 'solar:alt-arrow-up-bold'
+                      }
+                      width={12}
+                      className={sortBy === 'revenue' ? 'text-emerald-600' : 'text-gray-400'}
+                    />
+                  </button>
+                </th>
+                <th className="text-right py-3 px-4 font-semibold text-gray-900">
+                  <button
+                    onClick={() => handleSort('enrollments')}
+                    className="flex items-center gap-2 hover:text-emerald-600 transition-colors ml-auto"
+                  >
+                    Enrollments
+                    <Icon
+                      icon={
+                        sortBy === 'enrollments' && sortOrder === 'desc'
+                          ? 'solar:alt-arrow-down-bold'
+                          : 'solar:alt-arrow-up-bold'
+                      }
+                      width={12}
+                      className={sortBy === 'enrollments' ? 'text-emerald-600' : 'text-gray-400'}
+                    />
+                  </button>
+                </th>
+                <th className="text-center py-3 px-4 font-semibold text-gray-900">Growth</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {currentData.map((course) => (
+                <tr key={course.id} className="hover:bg-gray-50 transition-colors">
+                  <td className="py-4 px-4 align-top break-words">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-blue-500 rounded-md flex items-center justify-center text-white font-bold text-sm">
+                        {course.course.substring(0, 2).toUpperCase()}
+                      </div>
+                      <div>
+                        <div className="font-medium text-gray-900 text-sm break-words">{course.course}</div>
+                        <div className="text-xs text-gray-600">Updated {course.lastUpdated}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="py-4 px-4 align-top break-words">
+                    <span className="text-sm text-gray-700">{course.category}</span>
+                  </td>
+                  <td className="py-4 px-4 text-right align-top">
+                    <span className="font-semibold text-gray-900">{formatCurrency(course.revenue)}</span>
+                  </td>
+                  <td className="py-4 px-4 text-right align-top">
+                    <span className="text-gray-900">{course.enrollments.toLocaleString()}</span>
+                  </td>
+                  <td className="py-4 px-4 text-center align-top">
+                    <span
+                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getGrowthColor(
+                        course.growth,
+                      )}`}
+                    >
+                      {course.growth}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Pagination */}
