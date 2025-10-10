@@ -79,11 +79,10 @@ export const COURSE_TYPES = [
 
 // Time Range Options
 export const TIME_RANGES = [
-  { value: '7days', label: 'Last 7 Days' },
-  { value: '1month', label: 'Last Month' },
-  { value: '3months', label: 'Last 3 Months' },
-  { value: '6months', label: 'Last 6 Months' },
-  { value: '1year', label: 'Last Year' },
+  { value: '7days', label: 'Current Week' },
+  { value: '1month', label: 'Current MTD' },
+  { value: '1year', label: 'Current YTD' },
+  { value: 'custom', label: 'Custom' },
 ];
 
 // Geographic Zones

@@ -237,10 +237,7 @@ const StakeholderLayout: FC = () => {
                     ))}
                   </select>
 
-                  {/* Current Range Display */}
-                  <div className="hidden lg:inline text-sm text-white/80 bg-white/10 px-3 py-1 rounded">
-                    {formatDateRange()}
-                  </div>
+                  {/* Current Range Display removed to avoid duplication with the time range filter */}
 
                   {/* Refresh Button */}
                   <button

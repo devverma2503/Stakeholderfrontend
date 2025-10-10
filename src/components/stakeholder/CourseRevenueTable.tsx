@@ -178,14 +178,14 @@ const CourseRevenueTable = ({
                 </div>
                 <div className="text-right">
                   <div className="text-sm font-semibold text-gray-900">{formatCurrency(course.revenue)}</div>
-                  <div className="text-xs text-gray-500">Enrolls: {course.enrollments.toLocaleString()}</div>
+                  <div className="text-xs text-gray-500">Sales: {course.enrollments.toLocaleString()}</div>
                 </div>
               </div>
               <div className="mt-2 flex items-center justify-between">
                 <div className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${getGrowthColor(course.growth)}`}>
                   {course.growth}
                 </div>
-                <div className="text-xs text-gray-400">Updated {course.lastUpdated}</div>
+                {/* lastUpdated removed from UI */}
               </div>
             </div>
           ))}
@@ -236,7 +236,7 @@ const CourseRevenueTable = ({
                     onClick={() => handleSort('enrollments')}
                     className="flex items-center gap-2 hover:text-emerald-600 transition-colors ml-auto"
                   >
-                    Enrollments
+                    Sales
                     <Icon
                       icon={
                         sortBy === 'enrollments' && sortOrder === 'desc'
@@ -261,7 +261,7 @@ const CourseRevenueTable = ({
                       </div>
                       <div>
                         <div className="font-medium text-gray-900 text-sm break-words">{course.course}</div>
-                        <div className="text-xs text-gray-600">Updated {course.lastUpdated}</div>
+                        {/* Updated date removed from UI */}
                       </div>
                     </div>
                   </td>
@@ -375,7 +375,7 @@ const CourseRevenueTable = ({
             <div className="text-2xl font-bold text-purple-600">
               {courseData.reduce((sum, course) => sum + course.enrollments, 0).toLocaleString()}
             </div>
-            <div className="text-sm text-gray-600">Total Enrollments</div>
+            <div className="text-sm text-gray-600">Total Sales</div>
           </div>
         </div>
       </div>

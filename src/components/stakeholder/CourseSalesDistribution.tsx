@@ -202,7 +202,7 @@ const CourseSalesDistribution = ({
         <div>
           <h2 className="text-xl font-semibold text-gray-900">
             {viewType === 'course-wise'
-              ? 'Course Sales Distribution'
+              ? 'Product Sales Distribution'
               : `Zone Distribution - ${zoneViewSubject}`}
           </h2>
           <p className="text-gray-600 text-sm">
@@ -216,7 +216,7 @@ const CourseSalesDistribution = ({
           {/* View Type Tabs */}
           <div className="flex bg-gray-100 rounded-md p-1">
             {[
-              { id: 'course-wise', label: 'Course-wise', icon: 'solar:book-2-bold' },
+              { id: 'course-wise', label: 'Product-wise', icon: 'solar:book-2-bold' },
               { id: 'zone-wise', label: 'Zone-wise', icon: 'solar:map-bold' },
             ].map((view) => (
               <button
@@ -296,7 +296,7 @@ const CourseSalesDistribution = ({
         {/* Performance List */}
         <div className="lg:col-span-1">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">
-            {viewType === 'course-wise' ? 'Course Rankings' : 'Zone Rankings'}
+            {viewType === 'course-wise' ? 'Product Rankings' : 'Zone Rankings'}
           </h3>
           <div className="space-y-3 max-h-80 overflow-y-auto">
             {currentData.map((item, index) => (

@@ -99,7 +99,7 @@ const RevenueSummaryCards = ({
       previousValue: data.previousRevenue,
       previousPercent: makePercent(data.previousRevenueNum, data.totalRevenueNum),
       change: data.revenueChange,
-      icon: 'solar:dollar-minimalistic-bold-duotone',
+      icon: 'mdi:currency-inr',
       bgColor: 'bg-gradient-to-br from-emerald-50 to-emerald-100',
       iconColor: 'text-emerald-600',
       changeColor: 'text-emerald-600',
@@ -157,7 +157,7 @@ const RevenueSummaryCards = ({
               >
                 <Icon icon="solar:alt-arrow-up-bold" width={12} />
                 {card.change}
-                <span className="text-xs text-gray-500 ml-1">Previous</span>
+                <span className="text-xs text-gray-500 ml-1">Target</span>
               </div>
             </div>
           </div>
@@ -177,11 +177,7 @@ const RevenueSummaryCards = ({
                   <span className="text-xs text-gray-500 ml-1">Previous Year</span>
                 </span>
               </div>
-              <div className="flex items-center gap-1">
-                <div className="w-2 h-2 bg-current rounded-full opacity-60"></div>
-                <div className="w-2 h-2 bg-current rounded-full opacity-80"></div>
-                <div className="w-2 h-2 bg-current rounded-full"></div>
-              </div>
+              {/* decorative dots removed */}
             </div>
           </div>
         </div>
