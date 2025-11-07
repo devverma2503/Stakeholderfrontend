@@ -131,7 +131,7 @@ const RevenueSummaryCards = ({
     },
     {
       title: 'Top performing Zone',
-      value: data.avgRevenuePerCollege,
+      value: `${selectedZone !== 'all' ? (selectedZone.endsWith(' Zone') ? selectedZone.replace(' Zone', '') : selectedZone) : 'North'} (${data.avgRevenuePerCollege})`,
       previousValue: data.previousAvgRevenue,
       previousPercent: makePercent(data.previousAvgRevenueNum, data.avgRevenuePerCollegeNum),
       change: data.avgChange,
