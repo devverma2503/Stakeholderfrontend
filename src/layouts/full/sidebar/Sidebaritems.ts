@@ -57,7 +57,7 @@ const SidebarContent: MenuItem[] = [
           name: 'Sales Agent Profile',
           icon: 'solar:user-speak-bold-duotone',
           id: uniqueId(),
-          url: '/profile/sales-agent',
+          url: '/dashboard/stakeholder/sales-agent',
           isPro: false,
         },
       ],

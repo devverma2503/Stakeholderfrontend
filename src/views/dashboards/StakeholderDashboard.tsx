@@ -9,6 +9,7 @@ import InstituteLevelEngagement from '../../components/stakeholder/InstituteLeve
 import CollegePerformanceOverview from '../../components/stakeholder/CollegePerformanceOverview';
 import CollegeEngagementAnalytics from '../../components/stakeholder/CollegeEngagementAnalytics';
 import CollegeSubjectPerformance from '../../components/stakeholder/CollegeSubjectPerformance';
+import { Icon } from '@iconify/react';
 
 interface OutletContext {
   selectedTimeRange: string;
@@ -26,7 +27,6 @@ const StakeholderDashboard = () => {
 
   return (
     <div className="space-y-6">
-
       {/* Revenue Summary Cards - Always visible */}
       <RevenueSummaryCards
         timeRange={selectedTimeRange}

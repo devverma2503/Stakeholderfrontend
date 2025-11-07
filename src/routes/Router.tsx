@@ -51,7 +51,7 @@ const Router = [
       { path: '/', exact: true, element: <Dashboard /> },
       //   { path: '/', exact: true, element: <InternalDashboard /> },
       { path: '/profile/student/:userId', exact: true, element: <StudentProfile /> },
-        { path: '/profile/sales-agent', exact: true, element: <SalesAgentProfile /> },
+      //   { path: '/dashboard/stakeholder/sales-agent', exact: true, element: <SalesAgentProfile /> },
       //   { path: '/ui/typography', exact: true, element: <Typography /> },
       //   { path: '/ui/table', exact: true, element: <Table /> },
       //   { path: '/ui/form', exact: true, element: <Form /> },
@@ -75,6 +75,7 @@ const Router = [
     ),
     children: [
       { path: '/stakeholder', exact: true, element: <StakeholderDashboard /> },
+      { path: 'sales-agent', exact: true, element: <SalesAgentProfile /> },
     ],
   },
   {

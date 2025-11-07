@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Icon } from '@iconify/react';
 import Chart from 'react-apexcharts';
+import { UG_PRODUCTS, PG_PRODUCTS, PRINTED_NOTES_PRODUCTS } from '../../utils/constants';
 
 interface SalesAgentProfileProps {
   agentId?: string;
@@ -35,15 +36,15 @@ const SalesAgentProfile = ({ agentId = '1' }: SalesAgentProfileProps) => {
 
   // Course distribution data based on filters
   const getCourseDistribution = () => {
-    const baseData = [
-      { course: 'NEET Foundation', sales: 15, revenue: 3420000, percentage: 33.3 },
-      { course: 'AIIMS Preparation', sales: 12, revenue: 2880000, percentage: 26.7 },
-      { course: 'MBBS Complete Course', sales: 8, revenue: 1650000, percentage: 17.8 },
-      { course: 'Medical Foundation Bundle', sales: 6, revenue: 720000, percentage: 13.3 },
-      { course: 'NEET Complete Package', sales: 4, revenue: 580000, percentage: 8.9 },
-    ];
-
-    return baseData;
+    // Combine all products for demonstration, or filter by group if needed
+    const allProducts = [...UG_PRODUCTS, ...PG_PRODUCTS, ...PRINTED_NOTES_PRODUCTS];
+    // Example: show first 5 products, or you can map/slice as needed
+    return allProducts.slice(0, 5).map((product, idx) => ({
+      course: product,
+      sales: 10 + idx * 3, // Example sales data
+      revenue: 500000 + idx * 100000, // Example revenue data
+      percentage: 20 - idx * 2, // Example percentage
+    }));
   };
 
   const courseDistribution = getCourseDistribution();

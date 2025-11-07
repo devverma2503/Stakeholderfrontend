@@ -111,19 +111,35 @@ const StakeholderLayout: FC = () => {
                         label: 'Agent Wise',
                         icon: 'solar:users-group-two-rounded-bold-duotone',
                       },
+                      {
+                        id: 'sales-profile',
+                        label: 'Sales Agent Profile',
+                        icon: 'solar:user-speak-bold-duotone',
+                        link: '/dashboard/stakeholder/sales-agent',
+                      },
                     ].map((view) => (
                       <div key={view.id} className="mb-1">
-                        <button
-                          onClick={() => setSelectedView(view.id)}
-                          className={`w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-md transition-all duration-200 ${
-                            selectedView === view.id
-                              ? 'bg-lightprimary text-primary dark:bg-primary/20 dark:text-primary'
-                              : 'text-ld hover:bg-lightprimary hover:text-primary dark:text-white dark:hover:bg-primary/20 dark:hover:text-primary'
-                          }`}
-                        >
-                          <Icon icon={view.icon} width={20} />
-                          {view.label}
-                        </button>
+                        {view.link ? (
+                          <a
+                            href={view.link}
+                            className={`w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-md transition-all duration-200 text-ld hover:bg-lightprimary hover:text-primary dark:text-white dark:hover:bg-primary/20 dark:hover:text-primary`}
+                          >
+                            <Icon icon={view.icon} width={20} />
+                            {view.label}
+                          </a>
+                        ) : (
+                          <button
+                            onClick={() => setSelectedView(view.id)}
+                            className={`w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-md transition-all duration-200 ${
+                              selectedView === view.id
+                                ? 'bg-lightprimary text-primary dark:bg-primary/20 dark:text-primary'
+                                : 'text-ld hover:bg-lightprimary hover:text-primary dark:text-white dark:hover:bg-primary/20 dark:hover:text-primary'
+                            }`}
+                          >
+                            <Icon icon={view.icon} width={20} />
+                            {view.label}
+                          </button>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -405,22 +421,38 @@ const StakeholderLayout: FC = () => {
                         label: 'Agent Wise',
                         icon: 'solar:users-group-two-rounded-bold-duotone',
                       },
+                      {
+                        id: 'sales-profile',
+                        label: 'Sales Agent Profile',
+                        icon: 'solar:user-speak-bold-duotone',
+                        link: '/dashboard/stakeholder/sales-agent',
+                      },
                     ].map((view) => (
                       <div key={view.id} className="mb-1">
-                        <button
-                          onClick={() => {
-                            setSelectedView(view.id);
-                            closeMobileSidebar();
-                          }}
-                          className={`w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-md transition-all duration-200 ${
-                            selectedView === view.id
-                              ? 'bg-lightprimary text-primary dark:bg-primary/20 dark:text-primary'
-                              : 'text-ld hover:bg-lightprimary hover:text-primary dark:text-white dark:hover:bg-primary/20 dark:hover:text-primary'
-                          }`}
-                        >
-                          <Icon icon={view.icon} width={20} />
-                          {view.label}
-                        </button>
+                        {view.link ? (
+                          <a
+                            href={view.link}
+                            className={`w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-md transition-all duration-200 text-ld hover:bg-lightprimary hover:text-primary dark:text-white dark:hover:bg-primary/20 dark:hover:text-primary`}
+                          >
+                            <Icon icon={view.icon} width={20} />
+                            {view.label}
+                          </a>
+                        ) : (
+                          <button
+                            onClick={() => {
+                              setSelectedView(view.id);
+                              closeMobileSidebar();
+                            }}
+                            className={`w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-md transition-all duration-200 ${
+                              selectedView === view.id
+                                ? 'bg-lightprimary text-primary dark:bg-primary/20 dark:text-primary'
+                                : 'text-ld hover:bg-lightprimary hover:text-primary dark:text-white dark:hover:bg-primary/20 dark:hover:text-primary'
+                            }`}
+                          >
+                            <Icon icon={view.icon} width={20} />
+                            {view.label}
+                          </button>
+                        )}
                       </div>
                     ))}
                   </div>
