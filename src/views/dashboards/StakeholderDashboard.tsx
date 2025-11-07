@@ -11,6 +11,7 @@ import CollegeEngagementAnalytics from "../../components/stakeholder/CollegeEnga
 import CollegeSubjectPerformance from "../../components/stakeholder/CollegeSubjectPerformance";
 import { Icon } from "@iconify/react";
 import SalesAgentProfile from "../profile/SalesAgentProfile";
+import YearOnYearComparison from '../../components/stakeholder/YearOnYearComparison';
 
 interface OutletContext {
     selectedTimeRange: string;
@@ -54,6 +55,9 @@ const StakeholderDashboard = () => {
                         selectedZone={selectedZone}
                         filteredProducts={filteredProducts}
                     />
+
+                    {/* Year-on-Year Comparison Graph - now below Revenue Analytics */}
+                    <YearOnYearComparison timeRange={selectedTimeRange} />
 
                     {/* Key Performance Grid */}
                     {/* <div className="grid grid-cols-1 xl:grid-cols-2 gap-6"> */}

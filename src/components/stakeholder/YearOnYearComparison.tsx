@@ -1,92 +1,49 @@
-import { useState } from 'react';
 import { Icon } from '@iconify/react';
 import Chart from 'react-apexcharts';
-import { MEDICAL_SUBJECTS, GEOGRAPHIC_ZONES } from '../../utils/constants';
 
 interface YearOnYearComparisonProps {
-  timeRange: string;
+  timeRange?: string;
   selectedSubject?: string;
   selectedZone?: string;
+  startDate?: string;
+  endDate?: string;
 }
 
-const YearOnYearComparison = ({
-  timeRange,
-  selectedSubject = 'all',
-  selectedZone = 'all',
-}: YearOnYearComparisonProps) => {
-  const [selectedCourse, setSelectedCourse] = useState('all');
-  const [selectedArea, setSelectedArea] = useState('all');
-
-  const courses = ['All Courses', ...MEDICAL_SUBJECTS];
-
-  const areas = ['All Areas', ...GEOGRAPHIC_ZONES];
+const YearOnYearComparison = ({ timeRange, startDate, endDate }: YearOnYearComparisonProps) => {
+  // Use similar dummy data logic as RevenueSummaryCards
+  const multiplier = 1; // or getTimeRangeMultiplier(timeRange)
+  const baseRevenue = 12500000 * multiplier;
+  const revenueGrowth = 15;
+  const currentYearData = [
+    baseRevenue * 0.09,
+    baseRevenue * 0.11,
+    baseRevenue * 0.10,
+    baseRevenue * 0.12,
+    baseRevenue * 0.13,
+    baseRevenue * 0.12,
+    baseRevenue * 0.14,
+    baseRevenue * 0.13,
+    baseRevenue * 0.12,
+    baseRevenue * 0.11,
+    baseRevenue * 0.10,
+    baseRevenue * 0.09,
+  ];
+  const previousYearData = currentYearData.map(v => v / (1 + revenueGrowth / 100));
 
   const months = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
+    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
   ];
-
-  // Generate sample data for current year and previous year with filters
-  const generateData = () => {
-    let baseMultiplier = 1;
-
-    // Apply subject filter
-    if (selectedSubject !== 'all') {
-      const subjectIndex = MEDICAL_SUBJECTS.indexOf(selectedSubject);
-      baseMultiplier *= subjectIndex !== -1 ? (20 - subjectIndex) / 20 : 0.5;
-    }
-
-    // Apply zone filter
-    if (selectedZone !== 'all') {
-      baseMultiplier *= 0.4; // Zone-specific data
-    }
-
-    // Apply time range multiplier
-    const timeMultiplier =
-      timeRange === '1week' ? 0.25 : timeRange === '1month' ? 1 : timeRange === '3months' ? 3 : 12;
-    baseMultiplier *= timeMultiplier;
-
-    const baseCurrent = [
-      2800000, 3200000, 2900000, 3500000, 3800000, 3400000, 4200000, 4000000, 4500000, 4300000,
-      4800000, 4600000,
-    ];
-
-    const basePrevious = [
-      2200000, 2500000, 2300000, 2800000, 3000000, 2700000, 3300000, 3100000, 3600000, 3400000,
-      3900000, 3700000,
-    ];
-
-    return {
-      currentYearData: baseCurrent.map((value) =>
-        Math.floor(value * baseMultiplier * (0.9 + Math.random() * 0.2)),
-      ),
-      previousYearData: basePrevious.map((value) =>
-        Math.floor(value * baseMultiplier * (0.9 + Math.random() * 0.2)),
-      ),
-    };
-  };
-
-  const { currentYearData, previousYearData } = generateData();
 
   const chartData = {
     series: [
       {
-        name: '2023',
+        name: '2024',
         data: previousYearData,
         color: '#635BFF',
       },
       {
-        name: '2024',
+        name: '2025',
         data: currentYearData,
         color: '#10b981',
       },
@@ -95,9 +52,7 @@ const YearOnYearComparison = ({
       chart: {
         type: 'bar' as const,
         height: 400,
-        toolbar: {
-          show: true,
-        },
+        toolbar: { show: true },
       },
       plotOptions: {
         bar: {
@@ -107,24 +62,14 @@ const YearOnYearComparison = ({
           borderRadius: 4,
         },
       },
-      dataLabels: {
-        enabled: false,
-      },
-      stroke: {
-        show: true,
-        width: 2,
-        colors: ['transparent'],
-      },
+      dataLabels: { enabled: false },
+      stroke: { show: true, width: 2, colors: ['transparent'] },
       xaxis: {
         categories: months,
-        title: {
-          text: 'Month',
-        },
+        title: { text: 'Month' },
       },
       yaxis: {
-        title: {
-          text: 'Revenue (₹)',
-        },
+        title: { text: 'Revenue (₹)' },
         labels: {
           formatter: (value: number) => {
             if (value >= 10000000) return `₹${(value / 10000000).toFixed(1)}Cr`;
@@ -134,9 +79,7 @@ const YearOnYearComparison = ({
           },
         },
       },
-      fill: {
-        opacity: 1,
-      },
+      fill: { opacity: 1 },
       tooltip: {
         y: {
           formatter: (val: number) => {
@@ -151,18 +94,14 @@ const YearOnYearComparison = ({
         position: 'top' as const,
         horizontalAlign: 'center' as const,
       },
-      grid: {
-        strokeDashArray: 4,
-      },
+      grid: { strokeDashArray: 4 },
     },
   };
 
   // Calculate growth metrics
   const currentYearTotal = currentYearData.reduce((sum, val) => sum + val, 0);
   const previousYearTotal = previousYearData.reduce((sum, val) => sum + val, 0);
-  const growthRate = (((currentYearTotal - previousYearTotal) / previousYearTotal) * 100).toFixed(
-    1,
-  );
+  const growthRate = (((currentYearTotal - previousYearTotal) / previousYearTotal) * 100).toFixed(1);
 
   const bestMonth = months[currentYearData.indexOf(Math.max(...currentYearData))];
   const worstMonth = months[currentYearData.indexOf(Math.min(...currentYearData))];
@@ -173,36 +112,8 @@ const YearOnYearComparison = ({
         <div>
           <h2 className="text-xl font-semibold text-gray-900">Year-on-Year Comparison</h2>
           <p className="text-gray-600 text-sm">
-            Monthly revenue comparison between current and previous year
+            Monthly revenue comparison between 2024 and 2025
           </p>
-        </div>
-
-        <div className="flex flex-wrap gap-3">
-          {/* Course Filter */}
-          <select
-            value={selectedCourse}
-            onChange={(e) => setSelectedCourse(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm"
-          >
-            {courses.map((course, index) => (
-              <option key={index} value={course.toLowerCase().replace(/\s+/g, '-')}>
-                {course}
-              </option>
-            ))}
-          </select>
-
-          {/* Area Filter */}
-          <select
-            value={selectedArea}
-            onChange={(e) => setSelectedArea(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm"
-          >
-            {areas.map((area, index) => (
-              <option key={index} value={area.toLowerCase().replace(/\s+/g, '-')}>
-                {area}
-              </option>
-            ))}
-          </select>
         </div>
       </div>
 
@@ -254,46 +165,6 @@ const YearOnYearComparison = ({
           </div>
         </div>
       </div>
-
-      {/* Quarterly Comparison */}
-      {/* <div className="mt-6 pt-6 border-t border-gray-200">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Quarterly Performance</h3>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {['Q1', 'Q2', 'Q3', 'Q4'].map((quarter, index) => {
-            const quarterData = currentYearData.slice(index * 3, (index + 1) * 3);
-            const quarterTotal = quarterData.reduce((sum, val) => sum + val, 0);
-            const prevQuarterData = previousYearData.slice(index * 3, (index + 1) * 3);
-            const prevQuarterTotal = prevQuarterData.reduce((sum, val) => sum + val, 0);
-            const quarterGrowth = (
-              ((quarterTotal - prevQuarterTotal) / prevQuarterTotal) *
-              100
-            ).toFixed(1);
-
-            return (
-              <div key={quarter} className="bg-gray-50 rounded-md p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-gray-600">{quarter} 2024</span>
-                  <span
-                    className={`text-xs px-2 py-1 rounded-full ${
-                      parseFloat(quarterGrowth) >= 0
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-red-100 text-red-800'
-                    }`}
-                  >
-                    {quarterGrowth}%
-                  </span>
-                </div>
-                <div className="text-lg font-bold text-gray-900">
-                  ₹{(quarterTotal / 10000000).toFixed(1)}Cr
-                </div>
-                <div className="text-sm text-gray-600">
-                  vs ₹{(prevQuarterTotal / 10000000).toFixed(1)}Cr (2023)
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div> */}
     </div>
   );
 };
