@@ -17,10 +17,12 @@ interface OutletContext {
   selectedZone: string;
   selectedState?: string;
   setSelectedView: (view: string) => void;
+  selectedGroup?: string;
+  filteredProducts?: string[];
 }
 
 const StakeholderDashboard = () => {
-  const { selectedTimeRange, selectedView, selectedSubject, selectedZone } = useOutletContext<OutletContext>();
+  const { selectedTimeRange, selectedView, selectedSubject, selectedZone, filteredProducts = [] } = useOutletContext<OutletContext>();
 
   return (
     <div className="space-y-6">
@@ -30,6 +32,7 @@ const StakeholderDashboard = () => {
         timeRange={selectedTimeRange}
         selectedSubject={selectedSubject}
         selectedZone={selectedZone}
+        filteredProducts={filteredProducts}
       />
 
       {/* Dynamic Content Based on Selected View */}
@@ -40,6 +43,7 @@ const StakeholderDashboard = () => {
             timeRange={selectedTimeRange}
             selectedSubject={selectedSubject}
             selectedZone={selectedZone}
+            filteredProducts={filteredProducts}
           />
 
           {/* Key Performance Grid */}
@@ -48,6 +52,7 @@ const StakeholderDashboard = () => {
             timeRange={selectedTimeRange}
             selectedSubject={selectedSubject}
             selectedZone={selectedZone}
+            filteredProducts={filteredProducts}
           />
           {/* </div> */}
 
@@ -63,6 +68,7 @@ const StakeholderDashboard = () => {
             timeRange={selectedTimeRange}
             selectedSubject={selectedSubject}
             selectedZone={selectedZone}
+            filteredProducts={filteredProducts}
           />
         </>
       )}
@@ -74,11 +80,13 @@ const StakeholderDashboard = () => {
             timeRange={selectedTimeRange}
             selectedSubject={selectedSubject}
             selectedZone={selectedZone}
+            filteredProducts={filteredProducts}
           />
           <CourseRevenueTable
             timeRange={selectedTimeRange}
             selectedSubject={selectedSubject}
             selectedZone={selectedZone}
+            filteredProducts={filteredProducts}
           />
         </>
       )}
@@ -89,11 +97,13 @@ const StakeholderDashboard = () => {
             timeRange={selectedTimeRange}
             selectedSubject={selectedSubject}
             selectedZone={selectedZone}
+            filteredProducts={filteredProducts}
           />
           <CourseRevenueTable
             timeRange={selectedTimeRange}
             selectedSubject={selectedSubject}
             selectedZone={selectedZone}
+            filteredProducts={filteredProducts}
           />
         </>
       )}
@@ -104,11 +114,13 @@ const StakeholderDashboard = () => {
             timeRange={selectedTimeRange}
             selectedSubject={selectedSubject}
             selectedZone={selectedZone}
+            filteredProducts={filteredProducts}
           />
           <CourseRevenueTable
             timeRange={selectedTimeRange}
             selectedSubject={selectedSubject}
             selectedZone={selectedZone}
+            filteredProducts={filteredProducts}
           />
           {/* <InstituteLevelEngagement
             timeRange={selectedTimeRange}

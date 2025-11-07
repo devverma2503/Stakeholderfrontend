@@ -9,6 +9,7 @@ interface RevenueAnalyticsProps {
   selectedZone?: string;
   showGeographyFilter?: boolean;
   showSalesFilter?: boolean;
+  filteredProducts?: string[];
 }
 
 const RevenueAnalytics = ({
@@ -17,6 +18,7 @@ const RevenueAnalytics = ({
   selectedZone = 'all',
   showGeographyFilter = false,
   showSalesFilter = false,
+  filteredProducts = [],
 }: RevenueAnalyticsProps) => {
   const [selectedMetric, setSelectedMetric] = useState('revenue');
   const [selectedGeography, setSelectedGeography] = useState('all');
@@ -32,12 +34,24 @@ const RevenueAnalytics = ({
     'Ravi Gupta',
   ];
 
+  // Use filteredProducts for chart data if provided
+  const subjectsToShow = filteredProducts.length > 0 ? filteredProducts : MEDICAL_SUBJECTS;
+
   const generateRevenueData = () => {
     let baseMultiplier = 1;
 
+    // Group-based multiplier
+    let groupMultiplier = 1;
+    if (filteredProducts.length > 0) {
+      if (filteredProducts[0].toLowerCase().includes('printed notes')) groupMultiplier = 0.7;
+      else if (filteredProducts.length > 20) groupMultiplier = 1.5; // PG
+      else groupMultiplier = 1.0; // UG
+    }
+    baseMultiplier *= groupMultiplier;
+
     // Apply subject filter
     if (selectedSubject !== 'all') {
-      const subjectIndex = MEDICAL_SUBJECTS.indexOf(selectedSubject);
+      const subjectIndex = subjectsToShow.indexOf(selectedSubject);
       baseMultiplier *= subjectIndex !== -1 ? (20 - subjectIndex) / 20 : 0.5;
     }
 
@@ -70,7 +84,7 @@ const RevenueAnalytics = ({
     let baseMultiplier = 0.92; // slightly lower baseline for previous year
 
     if (selectedSubject !== 'all') {
-      const subjectIndex = MEDICAL_SUBJECTS.indexOf(selectedSubject);
+      const subjectIndex = subjectsToShow.indexOf(selectedSubject);
       baseMultiplier *= subjectIndex !== -1 ? (20 - subjectIndex) / 20 : 0.5;
     }
 
@@ -100,7 +114,7 @@ const RevenueAnalytics = ({
 
     // Apply subject filter
     if (selectedSubject !== 'all') {
-      const subjectIndex = MEDICAL_SUBJECTS.indexOf(selectedSubject);
+      const subjectIndex = subjectsToShow.indexOf(selectedSubject);
       baseMultiplier *= subjectIndex !== -1 ? (20 - subjectIndex) / 20 : 0.5;
     }
 
@@ -128,7 +142,7 @@ const RevenueAnalytics = ({
   const generatePreviousSalesData = () => {
     let baseMultiplier = 0.92;
     if (selectedSubject !== 'all') {
-      const subjectIndex = MEDICAL_SUBJECTS.indexOf(selectedSubject);
+      const subjectIndex = subjectsToShow.indexOf(selectedSubject);
       baseMultiplier *= subjectIndex !== -1 ? (20 - subjectIndex) / 20 : 0.5;
     }
     if (selectedZone !== 'all') {

@@ -8,6 +8,7 @@ interface CourseSalesDistributionProps {
   selectedSubject?: string;
   selectedZone?: string;
   showGeographyFilter?: boolean;
+  filteredProducts?: string[];
 }
 
 const CourseSalesDistribution = ({
@@ -15,12 +16,14 @@ const CourseSalesDistribution = ({
   selectedSubject = 'all',
   selectedZone = 'all',
   showGeographyFilter = false,
+  filteredProducts = [],
 }: CourseSalesDistributionProps) => {
   const [selectedGeography, setSelectedGeography] = useState('all');
   const [selectedMetric, setSelectedMetric] = useState('sales');
   const [viewType, setViewType] = useState<'course-wise' | 'zone-wise'>('course-wise');
 
-  const COURSES = ['DigiOne', 'DigiNeet', 'DigiTwo', 'DigiFMGE'];
+  // Use filteredProducts for course data if provided
+  const COURSES = filteredProducts.length > 0 ? filteredProducts : ['DigiOne', 'DigiNeet', 'DigiTwo', 'DigiFMGE'];
   const [zoneViewSubject, setZoneViewSubject] = useState(COURSES[0]);
 
   const geographyOptions = ['All Regions', ...GEOGRAPHIC_ZONES];
@@ -28,6 +31,15 @@ const CourseSalesDistribution = ({
   // Sample course data based on filters
   const getCourseData = () => {
     let baseMultiplier = 1;
+
+    // Group-based multiplier
+    let groupMultiplier = 1;
+    if (filteredProducts.length > 0) {
+      if (filteredProducts[0].toLowerCase().includes('printed notes')) groupMultiplier = 0.7;
+      else if (filteredProducts.length > 20) groupMultiplier = 1.5; // PG
+      else groupMultiplier = 1.0; // UG
+    }
+    baseMultiplier *= groupMultiplier;
 
     // Apply subject filter
     if (selectedSubject !== 'all') {

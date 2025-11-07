@@ -6,12 +6,14 @@ interface CourseRevenueTableProps {
   timeRange: string;
   selectedSubject?: string;
   selectedZone?: string;
+  filteredProducts?: string[];
 }
 
 const CourseRevenueTable = ({
   timeRange,
   selectedSubject = 'all',
   selectedZone = 'all',
+  filteredProducts = [],
 }: CourseRevenueTableProps) => {
   const [sortBy, setSortBy] = useState('revenue');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
@@ -19,10 +21,19 @@ const CourseRevenueTable = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
 
-  // Generate dynamic course data based on MBBS subjects
-  const courseData = MEDICAL_SUBJECTS.map((subject, index) => {
-    const baseRevenue = 3000000 + index * 500000;
-    const baseEnrollments = 100 + index * 20;
+  // Use filteredProducts for course data if provided
+  const subjectsToUse = filteredProducts.length > 0 ? filteredProducts : MEDICAL_SUBJECTS;
+  // Group-based multiplier
+  let groupMultiplier = 1;
+  if (subjectsToUse.length > 0) {
+    if (subjectsToUse[0].toLowerCase().includes('printed notes')) groupMultiplier = 0.7;
+    else if (subjectsToUse.length > 20) groupMultiplier = 1.5; // PG
+    else groupMultiplier = 1.0; // UG
+  }
+  // Generate dynamic course data based on subjectsToUse
+  const courseData = subjectsToUse.map((subject, index) => {
+    const baseRevenue = (3000000 + index * 500000) * groupMultiplier;
+    const baseEnrollments = (100 + index * 20) * groupMultiplier;
     const timeMultiplier =
       timeRange === '1week' ? 0.25 : timeRange === '1month' ? 1 : timeRange === '3months' ? 3 : 12;
 

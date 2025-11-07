@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import { Outlet } from 'react-router';
 import { Icon } from '@iconify/react';
-import { TIME_RANGES, PRODUCTS, GEOGRAPHIC_ZONES, INDIAN_STATES } from '../../utils/constants';
+import { TIME_RANGES, PRODUCTS, GEOGRAPHIC_ZONES, INDIAN_STATES, UG_PRODUCTS, PG_PRODUCTS, PRINTED_NOTES_PRODUCTS, STATE_ZONE_MAP } from '../../utils/constants';
 import { useUiStore } from 'src/stores/uiStore';
 import Profile from './header/Profile';
 import ScrollToTop from 'src/components/shared/ScrollToTop';
@@ -17,6 +17,7 @@ const StakeholderLayout: FC = () => {
   const [selectedSubject, setSelectedSubject] = useState('all');
   const [selectedZone, setSelectedZone] = useState('all');
   const [selectedState, setSelectedState] = useState('all');
+  const [selectedGroup, setSelectedGroup] = useState('all');
 
   // Get additional state from UI store
   const { startDate, endDate, setDateRange } = useUiStore();
@@ -60,6 +61,22 @@ const StakeholderLayout: FC = () => {
 
     return rangeLabels[selectedTimeRange] || 'Last 7 Days';
   };
+
+  // Compute filtered products based on selected group
+  let filteredProducts = PRODUCTS;
+  if (selectedGroup === 'UG') filteredProducts = UG_PRODUCTS;
+  else if (selectedGroup === 'PG') filteredProducts = PG_PRODUCTS;
+  else if (selectedGroup === 'printed-notes') filteredProducts = PRINTED_NOTES_PRODUCTS;
+
+  // Compute filtered states based on selected zone
+  let filteredStates: string[] = [];
+  let normalizedZone = selectedZone;
+  if (normalizedZone.endsWith(' Zone')) normalizedZone = normalizedZone.replace(' Zone', '');
+  if (selectedZone === 'all') {
+    filteredStates = Object.keys(STATE_ZONE_MAP);
+  } else {
+    filteredStates = Object.keys(STATE_ZONE_MAP).filter(st => (STATE_ZONE_MAP as Record<string, string>)[st] === normalizedZone);
+  }
 
   return (
     <>
@@ -189,7 +206,19 @@ const StakeholderLayout: FC = () => {
                     )}
                   </div>
 
-                  {/* Product Filter (renamed from Subjects) */}
+                  {/* Group Filter - should come before Product Filter */}
+                  <select
+                    value={selectedGroup}
+                    onChange={(e) => setSelectedGroup(e.target.value)}
+                    className="hidden md:block px-3 py-1 bg-white/20 backdrop-blur-sm border border-white/30 rounded-md text-white text-sm focus:ring-2 focus:ring-white/50 focus:border-transparent"
+                  >
+                    <option value="all" className="text-gray-900">All Groups</option>
+                    <option value="UG" className="text-gray-900">UG</option>
+                    <option value="PG" className="text-gray-900">PG</option>
+                    <option value="printed-notes" className="text-gray-900">Printed Notes</option>
+                  </select>
+
+                  {/* Product Filter (renamed from Subjects) - now comes after Group */}
                   <select
                     value={selectedSubject}
                     onChange={(e) => setSelectedSubject(e.target.value)}
@@ -198,30 +227,14 @@ const StakeholderLayout: FC = () => {
                     <option value="all" className="text-gray-900">
                       All Products
                     </option>
-                    {PRODUCTS.map((product) => (
+                    {filteredProducts.map((product) => (
                       <option key={product} value={product} className="text-gray-900">
                         {product}
                       </option>
                     ))}
                   </select>
 
-                  {/* State Filter */}
-                  <select
-                    value={selectedState}
-                    onChange={(e) => setSelectedState(e.target.value)}
-                    className="hidden md:block px-3 py-1 bg-white/20 backdrop-blur-sm border border-white/30 rounded-md text-white text-sm focus:ring-2 focus:ring-white/50 focus:border-transparent"
-                  >
-                    <option value="all" className="text-gray-900">
-                      All States
-                    </option>
-                    {INDIAN_STATES.map((st) => (
-                      <option key={st} value={st} className="text-gray-900">
-                        {st}
-                      </option>
-                    ))}
-                  </select>
-
-                  {/* Zone Filter */}
+                  {/* Zone Filter (moved before State) */}
                   <select
                     value={selectedZone}
                     onChange={(e) => setSelectedZone(e.target.value)}
@@ -233,6 +246,20 @@ const StakeholderLayout: FC = () => {
                     {GEOGRAPHIC_ZONES.map((zone) => (
                       <option key={zone} value={zone} className="text-gray-900">
                         {zone}
+                      </option>
+                    ))}
+                  </select>
+
+                  {/* State Filter (after Zone) */}
+                  <select
+                    value={selectedState}
+                    onChange={(e) => setSelectedState(e.target.value)}
+                    className="hidden md:block px-3 py-1 bg-white/20 backdrop-blur-sm border border-white/30 rounded-md text-white text-sm focus:ring-2 focus:ring-white/50 focus:border-transparent"
+                  >
+                    <option value="all" className="text-gray-900">All States</option>
+                    {filteredStates.map((st) => (
+                      <option key={st} value={st} className="text-gray-900">
+                        {st}
                       </option>
                     ))}
                   </select>
@@ -287,32 +314,32 @@ const StakeholderLayout: FC = () => {
                     ))}
                   </select>
 
+                  {/* Group Filter (mobile) - should come before Product Filter */}
+                  <select
+                    value={selectedGroup}
+                    onChange={(e) => setSelectedGroup(e.target.value)}
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  >
+                    <option value="all">All Groups</option>
+                    <option value="UG">UG</option>
+                    <option value="PG">PG</option>
+                    <option value="printed-notes">Printed Notes</option>
+                  </select>
+
                   <select
                     value={selectedSubject}
                     onChange={(e) => setSelectedSubject(e.target.value)}
                     className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   >
                     <option value="all">All Products</option>
-                    {PRODUCTS.map((p) => (
+                    {filteredProducts.map((p) => (
                       <option key={p} value={p} className="text-gray-900">
                         {p}
                       </option>
                     ))}
                   </select>
 
-                  <select
-                    value={selectedState}
-                    onChange={(e) => setSelectedState(e.target.value)}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                  >
-                    <option value="all">All States</option>
-                    {INDIAN_STATES.map((st) => (
-                      <option key={st} value={st} className="text-gray-900">
-                        {st}
-                      </option>
-                    ))}
-                  </select>
-
+                  {/* Zone Filter (moved before State) */}
                   <select
                     value={selectedZone}
                     onChange={(e) => setSelectedZone(e.target.value)}
@@ -322,6 +349,20 @@ const StakeholderLayout: FC = () => {
                     {GEOGRAPHIC_ZONES.map((z) => (
                       <option key={z} value={z} className="text-gray-900">
                         {z}
+                      </option>
+                    ))}
+                  </select>
+
+                  {/* State Filter (after Zone) */}
+                  <select
+                    value={selectedState}
+                    onChange={(e) => setSelectedState(e.target.value)}
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  >
+                    <option value="all">All States</option>
+                    {filteredStates.map((st) => (
+                      <option key={st} value={st} className="text-gray-900">
+                        {st}
                       </option>
                     ))}
                   </select>
@@ -393,7 +434,7 @@ const StakeholderLayout: FC = () => {
             <ScrollToTop>
               <></>
             </ScrollToTop>
-            <Outlet context={{ selectedTimeRange, selectedView, selectedSubject, selectedZone, selectedState, setSelectedView, setSelectedState }} />
+            <Outlet context={{ selectedTimeRange, selectedView, selectedSubject, selectedZone, selectedState, setSelectedView, setSelectedState, selectedGroup, filteredProducts }} />
           </div>
          </div>
        </div>

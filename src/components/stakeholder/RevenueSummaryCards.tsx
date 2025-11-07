@@ -5,17 +5,38 @@ interface RevenueSummaryCardsProps {
   timeRange: string;
   selectedSubject?: string;
   selectedZone?: string;
+  filteredProducts?: string[];
 }
 
 const RevenueSummaryCards = ({
   timeRange,
   selectedSubject = 'all',
   selectedZone = 'all',
+  filteredProducts = [],
 }: RevenueSummaryCardsProps) => {
   // Dynamic data based on filters
   const getFilteredData = () => {
     const multiplier = getTimeRangeMultiplier(timeRange);
     let baseMultiplier = 1;
+
+    // Group-based multiplier
+    let groupMultiplier = 1;
+    if (filteredProducts.length > 0) {
+      if (filteredProducts[0].toLowerCase().includes('printed notes')) groupMultiplier = 0.7;
+      else if (filteredProducts.length > 20) groupMultiplier = 1.5; // PG
+      else groupMultiplier = 1.0; // UG
+    }
+    baseMultiplier *= groupMultiplier;
+
+    // Use filteredProducts for top performing subject
+    const topPerformingSubjectValue =
+      selectedSubject !== 'all'
+        ? selectedSubject
+        : filteredProducts.length > 0
+        ? filteredProducts[0]
+        : MEDICAL_SUBJECTS && MEDICAL_SUBJECTS.length
+        ? MEDICAL_SUBJECTS[Math.floor(Math.random() * MEDICAL_SUBJECTS.length)]
+        : 'DigiOne';
 
     // Apply subject filter
     if (selectedSubject !== 'all') {
@@ -48,13 +69,6 @@ const RevenueSummaryCards = ({
     const previousSubscriptions = Math.floor(currentSubscriptions / (1 + subscriptionGrowth / 100));
     const previousAvgRevenue = currentAvgRevenue / (1 + avgGrowth / 100);
     const previousSubjectRevenue = currentSubjectRevenue / (1 + subjectGrowth / 100);
-
-    const topPerformingSubjectValue =
-      selectedSubject !== 'all'
-        ? selectedSubject
-        : MEDICAL_SUBJECTS && MEDICAL_SUBJECTS.length
-        ? MEDICAL_SUBJECTS[Math.floor(Math.random() * MEDICAL_SUBJECTS.length)]
-        : 'DigiOne';
 
     return {
       // Current period
