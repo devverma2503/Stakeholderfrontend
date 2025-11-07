@@ -67,6 +67,7 @@ const StakeholderLayout: FC = () => {
   if (selectedGroup === 'UG') filteredProducts = UG_PRODUCTS;
   else if (selectedGroup === 'PG') filteredProducts = PG_PRODUCTS;
   else if (selectedGroup === 'printed-notes') filteredProducts = PRINTED_NOTES_PRODUCTS;
+  else if (selectedGroup === 'all') filteredProducts = [...UG_PRODUCTS, ...PG_PRODUCTS, ...PRINTED_NOTES_PRODUCTS];
 
   // Compute filtered states based on selected zone
   let filteredStates: string[] = [];

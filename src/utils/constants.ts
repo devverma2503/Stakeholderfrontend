@@ -190,8 +190,6 @@ export const GEOGRAPHIC_ZONES = [
   'South Zone',
   'East Zone',
   'West Zone',
-  'Central Zone',
-  'Northeast Zone',
 ];
 
 // Indian States for Geography Data
